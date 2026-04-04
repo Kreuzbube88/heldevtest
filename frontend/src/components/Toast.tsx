@@ -16,7 +16,7 @@ export function Toast() {
       position: 'fixed',
       top: 'var(--space-lg)',
       right: 'var(--space-lg)',
-      zIndex: 1000,
+      zIndex: 'var(--z-toast)' as React.CSSProperties['zIndex'],
       display: 'flex',
       flexDirection: 'column',
       gap: 'var(--space-sm)'

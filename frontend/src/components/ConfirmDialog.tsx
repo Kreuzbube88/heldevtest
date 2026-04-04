@@ -15,9 +15,11 @@ export function ConfirmDialog() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 2000
+      zIndex: 'var(--z-modal)' as React.CSSProperties['zIndex'],
+      backdropFilter: 'blur(4px)',
+      animation: 'fadeIn var(--transition-fast) both'
     }}>
-      <div className="card" style={{ minWidth: '400px' }}>
+      <div className="card animate-scaleIn" style={{ minWidth: '400px' }}>
         <h2 style={{ marginBottom: 'var(--space-md)' }}>{confirmDialog.title}</h2>
         {confirmDialog.message && (
           <p style={{ marginBottom: 'var(--space-lg)', color: 'var(--color-text-secondary)' }}>

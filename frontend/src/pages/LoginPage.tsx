@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../stores/authStore';
 import { useUIStore } from '../stores/uiStore';
 import { api } from '../api/api';
+import { ThemeSwitcher } from '../components/ThemeSwitcher';
+import { LogIn, Shield } from 'lucide-react';
 
 export function LoginPage() {
   const [username, setUsername] = useState('');
@@ -25,41 +27,70 @@ export function LoginPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-bg-secondary)' }}>
-      <div className="card" style={{ width: '400px' }}>
-        <div style={{ textAlign: 'center', marginBottom: 'var(--space-lg)' }}>
-          <img src="/logo.png" alt="HELDEVTEST" style={{ height: '64px', marginBottom: 'var(--space-md)' }} />
-          <h1>{t('ui:login.title')}</h1>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+      overflow: 'hidden',
+      background: 'var(--color-bg-primary)',
+    }}>
+      {/* Ambient gradient */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'radial-gradient(ellipse 80% 60% at 20% 10%, rgba(102, 126, 234, 0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 90%, rgba(118, 75, 162, 0.12) 0%, transparent 60%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Theme toggle */}
+      <div style={{ position: 'absolute', top: 'var(--space-lg)', right: 'var(--space-lg)', zIndex: 10 }}>
+        <ThemeSwitcher />
+      </div>
+
+      {/* Card */}
+      <div
+        className="card animate-scaleIn"
+        style={{ width: '400px', maxWidth: 'calc(100vw - 32px)', position: 'relative', zIndex: 1 }}
+      >
+        {/* Large logo */}
+        <div style={{ textAlign: 'center', marginBottom: 'var(--space-xl)' }}>
+          <img
+            src="/logo.png"
+            alt="HELDEVTEST"
+            style={{ height: '120px', display: 'block', margin: '0 auto var(--space-md)' }}
+          />
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-sm)' }}>
+            <Shield size={18} color="var(--color-primary-solid)" />
+          </div>
+          <h1 style={{ marginBottom: 0 }}>{t('ui:login.title')}</h1>
         </div>
 
         <form onSubmit={(e) => { void handleSubmit(e); }}>
           <div style={{ marginBottom: 'var(--space-md)' }}>
-            <label style={{ display: 'block', marginBottom: 'var(--space-sm)' }}>
-              {t('ui:login.username')}
-            </label>
+            <label>{t('ui:login.username')}</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              style={{ width: '100%' }}
+              autoFocus
             />
           </div>
 
-          <div style={{ marginBottom: 'var(--space-lg)' }}>
-            <label style={{ display: 'block', marginBottom: 'var(--space-sm)' }}>
-              {t('ui:login.password')}
-            </label>
+          <div style={{ marginBottom: 'var(--space-xl)' }}>
+            <label>{t('ui:login.password')}</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={{ width: '100%' }}
             />
           </div>
 
           <button type="submit" className="btn-primary" style={{ width: '100%' }}>
+            <LogIn size={16} />
             {t('ui:login.loginButton')}
           </button>
         </form>
