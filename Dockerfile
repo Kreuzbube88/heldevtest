@@ -1,7 +1,7 @@
 # Multi-stage build for HELDEVTEST
 
 # Stage 1: Build backend
-FROM node:24-alpine AS backend-builder
+FROM node:22-alpine AS backend-builder
 
 WORKDIR /app/backend
 
@@ -15,7 +15,7 @@ COPY backend/ ./
 RUN npm run build && npm prune --production
 
 # Stage 2: Build frontend
-FROM node:24-alpine AS frontend-builder
+FROM node:22-alpine AS frontend-builder
 
 WORKDIR /app/frontend
 
@@ -26,7 +26,7 @@ COPY frontend/ ./
 RUN npm run build
 
 # Stage 3: Production image
-FROM node:24-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 

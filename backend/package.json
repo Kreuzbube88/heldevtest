@@ -10,7 +10,7 @@
     "url": "https://github.com/Kreuzbube88/heldevtest"
   },
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "dev": "tsx watch src/server.ts",
