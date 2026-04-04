@@ -15,6 +15,8 @@ export function SessionPage() {
   const { addToast, setSaving, isSaving } = useUIStore();
   const { t } = useTranslation();
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const localResultsRef = useRef(localResults);
+  useEffect(() => { localResultsRef.current = localResults; }, [localResults]);
 
   const loadSession = useCallback(async (sessionId: number) => {
     try {
@@ -36,7 +38,7 @@ export function SessionPage() {
     setSaving(true);
 
     saveTimeoutRef.current = setTimeout(() => {
-      const resultLocal = localResults.get(testPath) ?? {};
+      const resultLocal = localResultsRef.current.get(testPath) ?? {};
       const existing = currentResults.find(r => r.test_path === testPath);
 
       void (async () => {
