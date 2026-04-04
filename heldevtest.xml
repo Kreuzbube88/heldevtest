@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Container version="2">
-  <Name>HELDEVTEST</Name>
+  <n>HELDEVTEST</n>
   <Repository>ghcr.io/kreuzbube88/heldevtest:latest</Repository>
   <Registry>https://ghcr.io/kreuzbube88/heldevtest</Registry>
   <Network>bridge</Network>
@@ -12,7 +12,7 @@
   <ReadMe>https://github.com/Kreuzbube88/heldevtest/blob/main/README.md</ReadMe>
   <Overview>HELDEVTEST is an interactive test documentation tool for manual testing workflows. Upload markdown test plans, execute tests interactively, auto-save results, and export professional reports.[br][br]
 [b]Core Features:[/b][br]
-[b]✓ Markdown Upload[/b] — Drag & drop .md test plans, automatic structure parsing[br]
+[b]✓ Markdown Upload[/b] — Drag &amp; drop .md test plans, automatic structure parsing[br]
 [b]✓ Interactive Testing[/b] — Checkbox-based UI with Pass/Fail/Skip status, inline bug reporting[br]
 [b]✓ Auto-Save[/b] — Never lose progress, localStorage + backend sync (500ms debounced)[br]
 [b]✓ Progress Tracking[/b] — Real-time counters, completion percentage, time tracking[br]
@@ -44,7 +44,7 @@
 - Security audit checklists[br]
 - Unraid container testing (like HELBACKUP validation)[br][br]
 [b]Documentation:[/b] https://github.com/Kreuzbube88/heldevtest</Overview>
-  <Category>Tools:Testing</Category>
+  <Category>Productivity:</Category>
   <WebUI>http://[IP]:[PORT:3001]</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/Kreuzbube88/heltemplates/main/heldevtest.xml</TemplateURL>
   <Icon>https://github.com/Kreuzbube88/heldevtest/blob/main/frontend/public/favicon.png?raw=true</Icon>
@@ -75,6 +75,14 @@
   <Config Name="LOG_LEVEL" Target="LOG_LEVEL" Default="info" Mode=""
     Description="Log verbosity: debug, info, warn, error"
     Type="Variable" Display="advanced" Required="false" Mask="false">info</Config>
+  
+  <Config Name="PUID" Target="PUID" Default="99" Mode=""
+    Description="User ID for file permissions (Unraid default: 99)"
+    Type="Variable" Display="advanced" Required="false" Mask="false">99</Config>
+  
+  <Config Name="PGID" Target="PGID" Default="100" Mode=""
+    Description="Group ID for file permissions (Unraid default: 100)"
+    Type="Variable" Display="advanced" Required="false" Mask="false">100</Config>
   
   <TailscaleStateDir/>
 </Container>
