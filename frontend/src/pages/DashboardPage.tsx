@@ -5,6 +5,7 @@ import { useSessionStore } from '../stores/sessionStore';
 import { useUIStore } from '../stores/uiStore';
 import { api } from '../api/api';
 import { Header } from '../components/Header';
+import { BackgroundLogo } from '../components/BackgroundLogo';
 import { Upload, FileText, Trash2 } from 'lucide-react';
 import type { TestSession } from '../types';
 
@@ -60,6 +61,7 @@ export function DashboardPage() {
 
   return (
     <div>
+      <BackgroundLogo />
       <Header />
       <div className="container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>

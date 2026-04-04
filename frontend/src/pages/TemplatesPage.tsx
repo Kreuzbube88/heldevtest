@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../stores/uiStore';
 import { api } from '../api/api';
 import { Header } from '../components/Header';
+import { BackgroundLogo } from '../components/BackgroundLogo';
 import { FileText, Trash2 } from 'lucide-react';
 import type { Template } from '../types';
 
@@ -58,6 +59,7 @@ export function TemplatesPage() {
 
   return (
     <div>
+      <BackgroundLogo />
       <Header />
       <div className="container">
         <h1 style={{ marginBottom: 'var(--space-lg)' }}>{t('ui:templates.title')}</h1>

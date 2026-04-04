@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from './stores/authStore';
 import { api } from './api/api';
+import { applyAccentColor, getStoredAccentColor } from './utils/accentColors.js';
 import { SetupPage } from './pages/SetupPage';
 import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
@@ -28,6 +29,7 @@ function App() {
 
   useEffect(() => {
     initializeAuth();
+    applyAccentColor(getStoredAccentColor());
     void checkSetup();
   }, [initializeAuth]);
 

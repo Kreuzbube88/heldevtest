@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-import { useAuthStore } from '../stores/authStore';
-import { useUIStore } from '../stores/uiStore';
+import { useAuthStore } from '../stores/authStore.js';
+import { useUIStore } from '../stores/uiStore.js';
 import { useTranslation } from 'react-i18next';
 import { Settings, LogOut } from 'lucide-react';
-import { ThemeSwitcher } from './ThemeSwitcher';
+import { ThemeSwitcher } from './ThemeSwitcher.js';
+import { AccentColorSwitcher } from './AccentColorSwitcher.js';
 
 export function Header() {
   const { logout } = useAuthStore();
@@ -39,10 +40,21 @@ export function Header() {
         to="/"
         style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', textDecoration: 'none' }}
       >
-        <img src="/logo.png" alt="HELDEVTEST" style={{ height: '40px', width: 'auto' }} />
+        <span style={{
+          fontSize: '1.25rem',
+          fontWeight: 800,
+          letterSpacing: '0.05em',
+          background: 'var(--color-primary)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+        }}>
+          HELDEVTEST
+        </span>
       </Link>
 
       <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center' }}>
+        <AccentColorSwitcher />
         <ThemeSwitcher />
 
         <Link

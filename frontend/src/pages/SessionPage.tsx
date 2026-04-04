@@ -5,6 +5,7 @@ import { useSessionStore } from '../stores/sessionStore';
 import { useUIStore } from '../stores/uiStore';
 import { api } from '../api/api';
 import { Header } from '../components/Header';
+import { BackgroundLogo } from '../components/BackgroundLogo';
 import { Download } from 'lucide-react';
 import type { TestSession, TestResult } from '../types';
 
@@ -78,6 +79,7 @@ export function SessionPage() {
   if (!currentSession) {
     return (
       <div>
+        <BackgroundLogo />
         <Header />
         <div className="container">{t('common:loading')}</div>
       </div>
@@ -88,6 +90,7 @@ export function SessionPage() {
 
   return (
     <div>
+      <BackgroundLogo />
       <Header />
       <div className="container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>

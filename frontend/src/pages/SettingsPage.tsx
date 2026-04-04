@@ -4,6 +4,7 @@ import { useAuthStore } from '../stores/authStore';
 import { useUIStore } from '../stores/uiStore';
 import { api } from '../api/api';
 import { Header } from '../components/Header';
+import { BackgroundLogo } from '../components/BackgroundLogo';
 import { LanguageSelector } from '../components/LanguageSelector';
 
 export function SettingsPage() {
@@ -25,6 +26,7 @@ export function SettingsPage() {
 
   return (
     <div>
+      <BackgroundLogo />
       <Header />
       <div className="container">
         <h1 style={{ marginBottom: 'var(--space-lg)' }}>{t('ui:settings.title')}</h1>
