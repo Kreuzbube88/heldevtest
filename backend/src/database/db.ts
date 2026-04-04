@@ -5,8 +5,10 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DB_DIR = process.env.DB_PATH ? path.dirname(process.env.DB_PATH) : path.join(__dirname, '../../data');
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, '../../data/heldevtest.db');
+const DB_PATH = process.env.DB_PATH || '/app/data/heldevtest.db';
+const DB_DIR = path.dirname(DB_PATH);
+
+console.log('Database path:', DB_PATH);
 
 // Ensure data directory exists
 if (!fs.existsSync(DB_DIR)) {

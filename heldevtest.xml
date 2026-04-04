@@ -72,6 +72,10 @@
     Description="Timezone for timestamps (e.g., Europe/Berlin, America/New_York)"
     Type="Variable" Display="always" Required="false" Mask="false">Europe/Berlin</Config>
   
+  <Config Name="DB_PATH" Target="DB_PATH" Default="/app/data/heldevtest.db" Mode=""
+    Description="Database file path"
+    Type="Variable" Display="advanced" Required="false" Mask="false">/app/data/heldevtest.db</Config>
+
   <Config Name="LOG_LEVEL" Target="LOG_LEVEL" Default="info" Mode=""
     Description="Log verbosity: debug, info, warn, error"
     Type="Variable" Display="advanced" Required="false" Mask="false">info</Config>
