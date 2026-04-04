@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Download, Save } from 'lucide-react';
 import { Header } from '../components/Header';
@@ -39,6 +39,10 @@ export function BuilderPage() {
 
   const [testName, setTestName] = useState('');
   const [sections, setSections] = useState<BuilderSection[]>([]);
+
+  useEffect(() => {
+    console.log('📊 BuilderPage sections changed:', sections);
+  }, [sections]);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [saveDialog, setSaveDialog] = useState<SaveDialogState>({ name: '', description: '' });
   const [isSaving, setIsSaving] = useState(false);

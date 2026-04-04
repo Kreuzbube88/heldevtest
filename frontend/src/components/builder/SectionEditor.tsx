@@ -5,6 +5,7 @@ import { useUIStore } from '../../stores/uiStore.js';
 import { TestEditor } from './TestEditor.js';
 import { FreetextEditor } from './FreetextEditor.js';
 import { SectionCreationDialog } from './SectionCreationDialog.js';
+import { generateUUID } from '../../utils/uuid.js';
 
 interface Props {
   sections: BuilderSection[];
@@ -17,14 +18,26 @@ export function SectionEditor({ sections, onUpdate }: Props) {
   const [showDialog, setShowDialog] = useState<boolean>(false);
 
   const handleCreate = (data: { title: string; type: 'tests' | 'freetext' }): void => {
-    const newSection: BuilderSection = {
-      id: crypto.randomUUID(),
-      title: data.title,
-      type: data.type,
-      tests: data.type === 'tests' ? [] : undefined,
-      content: data.type === 'freetext' ? '' : undefined
-    };
-    onUpdate([...sections, newSection]);
+    console.log('🔧 SectionEditor.handleCreate called', data);
+
+    try {
+      const newSection: BuilderSection = {
+        id: generateUUID(),
+        title: data.title,
+        type: data.type,
+        tests: data.type === 'tests' ? [] : undefined,
+        content: data.type === 'freetext' ? '' : undefined
+      };
+
+      console.log('✅ New section created:', newSection);
+      console.log('📊 Current sections:', sections);
+      console.log('📊 New sections array:', [...sections, newSection]);
+
+      onUpdate([...sections, newSection]);
+      console.log('✅ onUpdate called');
+    } catch (error) {
+      console.error('❌ Error in handleCreate:', error);
+    }
   };
 
   const updateSection = (id: string, updates: Partial<BuilderSection>): void => {

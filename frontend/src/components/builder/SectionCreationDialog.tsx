@@ -14,11 +14,17 @@ export function SectionCreationDialog({ onClose, onCreate }: Props) {
   const [error, setError] = useState<string>('');
 
   const handleCreate = (): void => {
+    console.log('🔧 Dialog.handleCreate called', { title, type });
+
     if (!title.trim()) {
+      console.log('❌ Validation failed: empty title');
       setError(t('ui:builder.sectionTitleRequired'));
       return;
     }
+
+    console.log('✅ Calling onCreate');
     onCreate({ title: title.trim(), type });
+    console.log('✅ Calling onClose');
     onClose();
   };
 

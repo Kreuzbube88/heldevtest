@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import type { BuilderSection, BuilderTest } from '../../types';
+import { generateUUID } from '../../utils/uuid.js';
 
 interface Props {
   section: BuilderSection;
@@ -12,11 +13,11 @@ export function TestEditor({ section, onUpdate }: Props) {
   const { t } = useTranslation();
   const [newTestName, setNewTestName] = useState('');
 
-  const addTest = () => {
+  const addTest = (): void => {
     if (!newTestName.trim()) return;
 
     const newTest: BuilderTest = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       name: newTestName.trim()
     };
 
