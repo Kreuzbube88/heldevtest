@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Container version="2">
-  <n>HELDEVTEST</n>
+  <Name>HELDEVTEST</Name>
   <Repository>ghcr.io/kreuzbube88/heldevtest:latest</Repository>
   <Registry>https://ghcr.io/kreuzbube88/heldevtest</Registry>
   <Network>bridge</Network>
