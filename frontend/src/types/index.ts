@@ -23,6 +23,7 @@ export interface TestSession {
   passed_tests: number;
   failed_tests: number;
   skipped_tests: number;
+  archived: number;
 }
 
 export interface TestResult {

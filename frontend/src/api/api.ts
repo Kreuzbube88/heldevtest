@@ -127,6 +127,31 @@ export const api = {
     return res.json();
   },
 
+  async cloneSession(id: number): Promise<{ success: boolean; sessionId: number }> {
+    const res = await fetch(`${API_BASE}/sessions/${id}/clone`, {
+      method: 'POST',
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json() as Promise<{ success: boolean; sessionId: number }>;
+  },
+
+  async archiveSession(id: number): Promise<void> {
+    const res = await fetch(`${API_BASE}/sessions/${id}/archive`, {
+      method: 'PUT',
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error(await res.text());
+  },
+
+  async unarchiveSession(id: number): Promise<void> {
+    const res = await fetch(`${API_BASE}/sessions/${id}/unarchive`, {
+      method: 'PUT',
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error(await res.text());
+  },
+
   async saveTestResult(sessionId: number, testPath: string, status: string, bugs: string) {
     const res = await fetch(`${API_BASE}/sessions/${sessionId}/results`, {
       method: 'POST',

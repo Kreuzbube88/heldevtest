@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSessionStore } from '../stores/sessionStore';
@@ -52,6 +52,12 @@ export function SessionPage() {
     const existing = currentResults.find(r => r.test_path === testPath);
     return existing?.status ?? 'pending';
   }, [localResults, currentResults]);
+
+  const sections = currentSession?.markdown_structure.sections ?? [];
+  const overallStats = useMemo(
+    () => getOverallStats(sections, getStatus),
+    [sections, getStatus]
+  );
 
   const getResult = (testPath: string): { status: string; bugs: string; updated_at?: string } => {
     const local = localResults.get(testPath);
@@ -111,11 +117,9 @@ export function SessionPage() {
     );
   }
 
-  const sections = currentSession.markdown_structure.sections;
   const sectionIds = sections.map(s => s.id);
   const currentIndex = sectionIds.indexOf(currentSectionId);
   const currentSection = sections.find(s => s.id === currentSectionId) ?? sections[0];
-  const overallStats = getOverallStats(sections, getStatus);
 
   const handlePrevious = () => {
     if (currentIndex > 0) {

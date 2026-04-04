@@ -58,6 +58,46 @@ export async function sessionRoutes(fastify: FastifyInstance): Promise<void> {
     }
   );
 
+  // Clone session
+  fastify.post<{ Params: { id: string } }>(
+    '/api/sessions/:id/clone',
+    { preHandler: [fastify.authenticate] },
+    async (request, reply) => {
+      const userId = (request.user as { id: number }).id;
+      const cloned = SessionService.cloneSession(Number(request.params.id), userId);
+      if (!cloned) {
+        return reply.status(404).send({ error: request.t('errors:sessionNotFound') });
+      }
+      return reply.send({ success: true, sessionId: cloned.id });
+    }
+  );
+
+  // Archive session
+  fastify.put<{ Params: { id: string } }>(
+    '/api/sessions/:id/archive',
+    { preHandler: [fastify.authenticate] },
+    async (request, reply) => {
+      const ok = SessionService.archiveSession(Number(request.params.id));
+      if (!ok) {
+        return reply.status(404).send({ error: request.t('errors:sessionNotFound') });
+      }
+      return reply.send({ success: true });
+    }
+  );
+
+  // Unarchive session
+  fastify.put<{ Params: { id: string } }>(
+    '/api/sessions/:id/unarchive',
+    { preHandler: [fastify.authenticate] },
+    async (request, reply) => {
+      const ok = SessionService.unarchiveSession(Number(request.params.id));
+      if (!ok) {
+        return reply.status(404).send({ error: request.t('errors:sessionNotFound') });
+      }
+      return reply.send({ success: true });
+    }
+  );
+
   // Delete session
   fastify.delete<{ Params: { id: string } }>(
     '/api/sessions/:id',

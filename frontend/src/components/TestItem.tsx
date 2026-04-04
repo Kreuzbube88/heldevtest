@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, X, Minus, CheckCircle, XCircle, AlertCircle, Circle, Clock } from 'lucide-react';
 import type { Test } from '../types';
@@ -16,7 +17,7 @@ interface Props {
   onBugsChange: (bugs: string) => void;
 }
 
-export function TestItem({ test, result, onStatusChange, onBugsChange }: Props) {
+export const TestItem = React.memo(function TestItem({ test, result, onStatusChange, onBugsChange }: Props) {
   const { t, i18n } = useTranslation('ui');
   const { status, bugs, updated_at } = result;
 
@@ -124,4 +125,4 @@ export function TestItem({ test, result, onStatusChange, onBugsChange }: Props) 
       )}
     </div>
   );
-}
+});

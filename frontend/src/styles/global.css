@@ -26,6 +26,18 @@ body {
   min-height: 100vh;
 }
 
+/* ==================== FOCUS INDICATORS ==================== */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible,
+label:focus-visible {
+  outline: 3px solid var(--color-primary-solid);
+  outline-offset: 2px;
+}
+
 /* ==================== TYPOGRAPHY ==================== */
 
 h1, h2, h3, h4, h5, h6 {

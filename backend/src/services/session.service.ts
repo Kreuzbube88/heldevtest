@@ -42,6 +42,39 @@ export class SessionService {
     db.prepare('DELETE FROM test_sessions WHERE id = ?').run(id);
   }
 
+  static cloneSession(sessionId: number, userId: number): TestSession | undefined {
+    const original = this.getSessionById(sessionId);
+    if (!original) return undefined;
+
+    const plan = original.markdown_structure as unknown as ParsedTestPlan;
+    const totalTests = plan.sections.reduce(
+      (sum, section) =>
+        sum + section.subsections.reduce((subSum, subsection) => subSum + subsection.tests.length, 0),
+      0
+    );
+
+    const info = db.prepare(`
+      INSERT INTO test_sessions (user_id, name, filename, markdown_structure, total_tests)
+      VALUES (?, ?, ?, ?, ?)
+    `).run(userId, `${original.name}_Copy`, original.filename, JSON.stringify(plan), totalTests);
+
+    return db.prepare('SELECT * FROM test_sessions WHERE id = ?').get(info.lastInsertRowid) as TestSession;
+  }
+
+  static archiveSession(sessionId: number): boolean {
+    const result = db.prepare(
+      `UPDATE test_sessions SET archived = 1, updated_at = datetime('now') WHERE id = ?`
+    ).run(sessionId);
+    return result.changes > 0;
+  }
+
+  static unarchiveSession(sessionId: number): boolean {
+    const result = db.prepare(
+      `UPDATE test_sessions SET archived = 0, updated_at = datetime('now') WHERE id = ?`
+    ).run(sessionId);
+    return result.changes > 0;
+  }
+
   static saveTestResult(
     sessionId: number,
     testPath: string,

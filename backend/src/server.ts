@@ -14,6 +14,7 @@ import { errorHandler } from './middleware/error.middleware.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import db from './database/db.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -51,6 +52,16 @@ await fastify.register(i18nextMiddleware.plugin, { i18next });
 
 // Authenticate decorator
 fastify.decorate('authenticate', authMiddleware);
+
+// Health check
+fastify.get('/health', async (_request, reply) => {
+  try {
+    db.prepare('SELECT 1').get();
+    return reply.send({ status: 'ok', database: 'connected' });
+  } catch {
+    return reply.status(503).send({ status: 'error', database: 'disconnected' });
+  }
+});
 
 // Routes
 await fastify.register(authRoutes);

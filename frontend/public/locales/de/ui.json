@@ -52,7 +52,12 @@
     "sortUpdated": "Zuletzt aktualisiert",
     "sortCreated": "Zuletzt erstellt",
     "sortName": "Name A-Z",
-    "sortProgress": "Fortschritt"
+    "sortProgress": "Fortschritt",
+    "cloneSession": "Sitzung duplizieren",
+    "archiveSession": "Archivieren",
+    "unarchiveSession": "Dearchivieren",
+    "showArchived": "Archivierte anzeigen",
+    "archivedBadge": "Archiviert"
   },
   "session": {
     "title": "Test-Sitzung",
@@ -177,6 +182,17 @@
     "saveSuccess": "Erfolgreich gespeichert",
     "exportSuccess": "Export erfolgreich",
     "templateCreated": "Template erfolgreich erstellt",
-    "error": "Ein Fehler ist aufgetreten"
+    "error": "Ein Fehler ist aufgetreten",
+    "cloneSuccess": "Sitzung dupliziert",
+    "archiveSuccess": "Sitzung archiviert",
+    "unarchiveSuccess": "Sitzung dearchiviert"
+  },
+  "errors": {
+    "uploadFailed": "Upload fehlgeschlagen. Stelle sicher, dass die Datei eine .md ist.",
+    "sessionNotFound": "Sitzung nicht gefunden. Sie wurde möglicherweise gelöscht.",
+    "invalidMarkdown": "Markdown-Datei konnte nicht geparst werden. Prüfe die Formatierung.",
+    "networkError": "Netzwerkfehler. Prüfe deine Verbindung.",
+    "unauthorized": "Nicht autorisiert. Bitte melde dich erneut an.",
+    "serverError": "Server-Fehler. Bitte versuche es später erneut."
   }
 }

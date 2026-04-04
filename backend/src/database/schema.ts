@@ -62,4 +62,11 @@ export function initializeSchema(db: Database.Database): void {
     CREATE INDEX IF NOT EXISTS idx_results_session ON test_results(session_id);
     CREATE INDEX IF NOT EXISTS idx_screenshots_session ON screenshots(session_id);
   `);
+
+  // Migrations: add columns that may not exist in older DBs
+  try {
+    db.exec(`ALTER TABLE test_sessions ADD COLUMN archived INTEGER NOT NULL DEFAULT 0`);
+  } catch {
+    // Column already exists
+  }
 }

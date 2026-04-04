@@ -1,4 +1,5 @@
-import { Calendar, Clock, FileText, Trash2, Play, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import React from 'react';
+import { Calendar, Clock, FileText, Trash2, Play, CheckCircle, XCircle, AlertCircle, Copy, Archive, ArchiveRestore } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { formatRelativeTime, formatTimestamp } from '../utils/dateFormatter.js';
 import type { TestSession } from '../types';
@@ -7,9 +8,11 @@ interface Props {
   session: TestSession;
   onOpen: () => void;
   onDelete: () => void;
+  onClone: () => void;
+  onArchive: () => void;
 }
 
-export function SessionCard({ session, onOpen, onDelete }: Props) {
+export const SessionCard = React.memo(function SessionCard({ session, onOpen, onDelete, onClone, onArchive }: Props) {
   const { t, i18n } = useTranslation();
 
   const percentage = session.total_tests > 0
@@ -37,6 +40,8 @@ export function SessionCard({ session, onOpen, onDelete }: Props) {
     return t('ui:dashboard.statusNotStarted');
   };
 
+  const isArchived = session.archived === 1;
+
   return (
     <div
       className="card"
@@ -45,7 +50,8 @@ export function SessionCard({ session, onOpen, onDelete }: Props) {
         cursor: 'pointer',
         transition: 'all var(--transition-base)',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        opacity: isArchived ? 0.6 : 1
       }}
       onClick={onOpen}
     >
@@ -84,21 +90,42 @@ export function SessionCard({ session, onOpen, onDelete }: Props) {
           </div>
         </div>
 
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete();
-          }}
-          className="btn-ghost"
-          style={{
-            padding: 'var(--space-sm)',
-            color: 'var(--color-error)',
-            position: 'relative',
-            zIndex: 2
-          }}
-        >
-          <Trash2 size={18} />
-        </button>
+        <div style={{ display: 'flex', gap: 'var(--space-xs)', position: 'relative', zIndex: 2 }}>
+          {isArchived && (
+            <span className="badge badge-info" style={{ fontSize: 'var(--text-xs)' }}>
+              {t('ui:dashboard.archivedBadge')}
+            </span>
+          )}
+          <button
+            onClick={(e) => { e.stopPropagation(); onClone(); }}
+            className="btn-ghost"
+            style={{ padding: 'var(--space-sm)', color: 'var(--color-text-secondary)' }}
+            title={t('ui:dashboard.cloneSession')}
+          >
+            <Copy size={16} />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); onArchive(); }}
+            className="btn-ghost"
+            style={{ padding: 'var(--space-sm)', color: 'var(--color-text-secondary)' }}
+            title={isArchived ? t('ui:dashboard.unarchiveSession') : t('ui:dashboard.archiveSession')}
+          >
+            {isArchived ? <ArchiveRestore size={16} /> : <Archive size={16} />}
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="btn-ghost"
+            style={{
+              padding: 'var(--space-sm)',
+              color: 'var(--color-error)',
+            }}
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>
       </div>
 
       <div style={{ marginBottom: 'var(--space-md)' }}>
@@ -224,4 +251,4 @@ export function SessionCard({ session, onOpen, onDelete }: Props) {
       </div>
     </div>
   );
-}
+});

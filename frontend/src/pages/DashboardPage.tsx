@@ -1,7 +1,18 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Upload, FolderKanban, FileEdit } from 'lucide-react';
+import { Upload, FolderKanban, FileEdit, Archive } from 'lucide-react';
+
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 import { Header } from '../components/Header';
 import { BackgroundLogo } from '../components/BackgroundLogo';
 import { StatsCards } from '../components/StatsCards';
@@ -21,11 +32,15 @@ export function DashboardPage() {
 
   const [filteredSessions, setFilteredSessions] = useState<TestSession[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearch = useDebounce(searchTerm, 300);
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState('updated');
+  const [showArchived, setShowArchived] = useState(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showWizard, setShowWizard] = useState(false);
   const [wizardProblems, setWizardProblems] = useState<Problem[]>([]);
   const [pendingSessionId, setPendingSessionId] = useState<number | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadSessions = useCallback(async () => {
     try {
@@ -43,10 +58,14 @@ export function DashboardPage() {
   useEffect(() => {
     let filtered = [...sessions];
 
-    if (searchTerm) {
+    if (!showArchived) {
+      filtered = filtered.filter(s => s.archived !== 1);
+    }
+
+    if (debouncedSearch) {
       filtered = filtered.filter(s =>
-        s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        s.filename.toLowerCase().includes(searchTerm.toLowerCase())
+        s.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        s.filename.toLowerCase().includes(debouncedSearch.toLowerCase())
       );
     }
 
@@ -73,12 +92,39 @@ export function DashboardPage() {
     });
 
     setFilteredSessions(filtered);
-  }, [sessions, searchTerm, filter, sort]);
+  }, [sessions, debouncedSearch, filter, sort, showArchived]);
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDragging(false);
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    if (!file.name.endsWith('.md')) {
+      addToast('error', t('ui:errors.uploadFailed'));
+      return;
+    }
+    await processUpload(file);
+  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    await processUpload(file);
+    e.target.value = '';
+  };
 
+  const processUpload = async (file: File) => {
     try {
       const response = await api.uploadTest(file);
       if (response.problems && response.problems.length > 0 && response.sessionId) {
@@ -90,10 +136,8 @@ export function DashboardPage() {
         navigate(`/session/${response.sessionId}`);
       }
     } catch {
-      addToast('error', t('ui:toast.uploadError'));
+      addToast('error', t('ui:errors.uploadFailed'));
     }
-
-    e.target.value = '';
   };
 
   const handleWizardResolve = async (resolutions: Record<string, Resolution>) => {
@@ -141,13 +185,48 @@ export function DashboardPage() {
     );
   };
 
+  const handleClone = async (id: number) => {
+    try {
+      await api.cloneSession(id);
+      addToast('success', t('ui:toast.cloneSuccess'));
+      void loadSessions();
+    } catch {
+      addToast('error', t('ui:toast.error'));
+    }
+  };
+
+  const handleArchive = async (id: number, currentlyArchived: boolean) => {
+    try {
+      if (currentlyArchived) {
+        await api.unarchiveSession(id);
+        addToast('success', t('ui:toast.unarchiveSuccess'));
+      } else {
+        await api.archiveSession(id);
+        addToast('success', t('ui:toast.archiveSuccess'));
+      }
+      void loadSessions();
+    } catch {
+      addToast('error', t('ui:toast.error'));
+    }
+  };
+
   const totalTests = sessions.reduce((sum, s) => sum + s.total_tests, 0);
   const passedTests = sessions.reduce((sum, s) => sum + s.passed_tests, 0);
   const failedTests = sessions.reduce((sum, s) => sum + s.failed_tests, 0);
   const activeSessions = sessions.filter(s => s.passed_tests > 0 && s.passed_tests < s.total_tests).length;
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh' }}>
+    <div
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        outline: isDragging ? '3px dashed var(--color-primary-solid)' : 'none',
+        outlineOffset: '-4px',
+      }}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={(e) => { void handleDrop(e); }}
+    >
       {showWizard && (
         <ImportWizard
           problems={wizardProblems}
@@ -199,6 +278,7 @@ export function DashboardPage() {
               <Upload size={20} />
               {t('ui:dashboard.uploadTest')}
               <input
+                ref={fileInputRef}
                 type="file"
                 accept=".md"
                 onChange={(e) => { void handleFileUpload(e); }}
@@ -215,11 +295,23 @@ export function DashboardPage() {
           activeSessions={activeSessions}
         />
 
-        <SessionFilters
-          onSearchChange={setSearchTerm}
-          onFilterChange={setFilter}
-          onSortChange={setSort}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+          <div style={{ flex: 1 }}>
+            <SessionFilters
+              onSearchChange={setSearchTerm}
+              onFilterChange={setFilter}
+              onSortChange={setSort}
+            />
+          </div>
+          <button
+            onClick={() => setShowArchived(prev => !prev)}
+            className={showArchived ? 'btn-primary' : 'btn-secondary'}
+            style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', flexShrink: 0 }}
+          >
+            <Archive size={16} />
+            {t('ui:dashboard.showArchived')}
+          </button>
+        </div>
 
         {filteredSessions.length === 0 ? (
           <div className="card" style={{ textAlign: 'center', padding: 'var(--space-3xl)', color: 'var(--color-text-secondary)' }}>
@@ -239,6 +331,8 @@ export function DashboardPage() {
                 session={session}
                 onOpen={() => navigate(`/session/${session.id}`)}
                 onDelete={() => handleDelete(session.id)}
+                onClone={() => { void handleClone(session.id); }}
+                onArchive={() => { void handleArchive(session.id, session.archived === 1); }}
               />
             ))}
           </div>

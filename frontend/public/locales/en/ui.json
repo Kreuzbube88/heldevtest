@@ -52,7 +52,12 @@
     "sortUpdated": "Recently Updated",
     "sortCreated": "Recently Created",
     "sortName": "Name A-Z",
-    "sortProgress": "Progress"
+    "sortProgress": "Progress",
+    "cloneSession": "Duplicate Session",
+    "archiveSession": "Archive",
+    "unarchiveSession": "Unarchive",
+    "showArchived": "Show Archived",
+    "archivedBadge": "Archived"
   },
   "session": {
     "title": "Test Session",
@@ -177,6 +182,17 @@
     "saveSuccess": "Saved successfully",
     "exportSuccess": "Export successful",
     "templateCreated": "Template created successfully",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "cloneSuccess": "Session duplicated",
+    "archiveSuccess": "Session archived",
+    "unarchiveSuccess": "Session unarchived"
+  },
+  "errors": {
+    "uploadFailed": "Upload failed. Make sure the file is a .md file.",
+    "sessionNotFound": "Session not found. It may have been deleted.",
+    "invalidMarkdown": "Could not parse the Markdown file. Check the formatting.",
+    "networkError": "Network error. Check your connection.",
+    "unauthorized": "Unauthorized. Please log in again.",
+    "serverError": "Server error. Please try again later."
   }
 }
