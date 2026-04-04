@@ -31,4 +31,16 @@ export class AuthService {
   static updateUserLanguage(userId: number, language: string): void {
     db.prepare('UPDATE users SET language = ? WHERE id = ?').run(language, userId);
   }
+
+  static async updatePassword(userId: number, currentPassword: string, newPassword: string): Promise<boolean> {
+    const user = db.prepare('SELECT password_hash FROM users WHERE id = ?').get(userId) as { password_hash: string } | undefined;
+    if (!user) return false;
+
+    const isValid = await bcrypt.compare(currentPassword, user.password_hash);
+    if (!isValid) return false;
+
+    const newHash = await bcrypt.hash(newPassword, 12);
+    db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(newHash, userId);
+    return true;
+  }
 }

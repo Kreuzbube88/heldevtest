@@ -45,6 +45,24 @@ export const api = {
     return res.json();
   },
 
+  async changePassword(currentPassword: string, newPassword: string) {
+    const res = await fetch(`${API_BASE}/auth/password`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      try {
+        const json = JSON.parse(text) as { error?: string };
+        throw new Error(json.error ?? text);
+      } catch {
+        throw new Error(text);
+      }
+    }
+    return res.json();
+  },
+
   // Sessions
   async uploadTest(file: File) {
     const formData = new FormData();

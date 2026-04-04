@@ -3,5 +3,7 @@
   "passwordRequired": "Password is required",
   "passwordTooShort": "Password must be at least 8 characters",
   "languageRequired": "Language is required",
-  "languageInvalid": "Invalid language. Allowed: de, en"
+  "languageInvalid": "Invalid language. Allowed: de, en",
+  "currentPasswordRequired": "Current password is required",
+  "currentPasswordInvalid": "Current password is incorrect"
 }

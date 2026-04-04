@@ -13,6 +13,11 @@ export function SettingsPage() {
   const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState(user?.language ?? 'de');
 
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
   const handleSave = async () => {
     try {
       await api.updateLanguage(language);
@@ -21,6 +26,32 @@ export function SettingsPage() {
       addToast('success', t('ui:settings.languageChanged'));
     } catch {
       addToast('error', t('ui:toast.error'));
+    }
+  };
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (newPassword.length < 8) {
+      addToast('error', t('validation:passwordTooShort'));
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      addToast('error', t('ui:settings.passwordMismatch'));
+      return;
+    }
+
+    setIsChangingPassword(true);
+    try {
+      await api.changePassword(currentPassword, newPassword);
+      addToast('success', t('ui:settings.passwordChanged'));
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      addToast('error', err instanceof Error ? err.message : t('ui:settings.passwordChangeFailed'));
+    } finally {
+      setIsChangingPassword(false);
     }
   };
 
@@ -39,11 +70,57 @@ export function SettingsPage() {
           </button>
         </div>
 
-        <div className="card">
+        <div className="card" style={{ marginBottom: 'var(--space-lg)' }}>
           <h2 style={{ marginBottom: 'var(--space-md)' }}>{t('ui:settings.account')}</h2>
           <div style={{ color: 'var(--color-text-secondary)' }}>
             {t('ui:login.username')}: <strong>{user?.username}</strong>
           </div>
+        </div>
+
+        <div className="card">
+          <h2 style={{ marginBottom: 'var(--space-md)' }}>{t('ui:settings.changePassword')}</h2>
+          <form onSubmit={(e) => { void handlePasswordChange(e); }}>
+            <div className="form-group">
+              <label>{t('ui:settings.currentPassword')}</label>
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={e => setCurrentPassword(e.target.value)}
+                required
+                disabled={isChangingPassword}
+              />
+            </div>
+            <div className="form-group">
+              <label>{t('ui:settings.newPassword')}</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={e => setNewPassword(e.target.value)}
+                required
+                minLength={8}
+                disabled={isChangingPassword}
+              />
+            </div>
+            <div className="form-group">
+              <label>{t('ui:settings.confirmNewPassword')}</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                required
+                minLength={8}
+                disabled={isChangingPassword}
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn-primary"
+              disabled={isChangingPassword}
+              style={{ marginTop: 'var(--space-md)' }}
+            >
+              {isChangingPassword ? t('common:loading') : t('ui:settings.changePassword')}
+            </button>
+          </form>
         </div>
       </div>
     </div>

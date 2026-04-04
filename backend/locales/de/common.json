@@ -2,5 +2,6 @@
   "welcome": "Willkommen bei HELDEVTEST",
   "success": "Erfolgreich",
   "saved": "Gespeichert",
-  "deleted": "Gelöscht"
+  "deleted": "Gelöscht",
+  "passwordChanged": "Passwort erfolgreich geändert"
 }

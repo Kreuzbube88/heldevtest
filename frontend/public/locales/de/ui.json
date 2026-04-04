@@ -57,7 +57,14 @@
     "language": "Sprache",
     "languageChanged": "Sprache geändert",
     "account": "Konto",
-    "logoutConfirm": "Wirklich abmelden?"
+    "logoutConfirm": "Wirklich abmelden?",
+    "changePassword": "Passwort ändern",
+    "currentPassword": "Aktuelles Passwort",
+    "newPassword": "Neues Passwort",
+    "confirmNewPassword": "Neues Passwort bestätigen",
+    "passwordMismatch": "Passwörter stimmen nicht überein",
+    "passwordChanged": "Passwort erfolgreich geändert",
+    "passwordChangeFailed": "Passwortänderung fehlgeschlagen"
   },
   "toast": {
     "uploadSuccess": "Test erfolgreich hochgeladen",

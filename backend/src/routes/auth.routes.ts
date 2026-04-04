@@ -3,6 +3,11 @@ import { AuthService } from '../services/auth.service.js';
 import { TemplateService } from '../services/template.service.js';
 import type { CreateUserBody, LoginBody } from '../types/index.js';
 
+interface ChangePasswordBody {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export async function authRoutes(fastify: FastifyInstance): Promise<void> {
   // Check if setup is needed
   fastify.get('/api/auth/status', async (_request, reply) => {
@@ -71,6 +76,33 @@ export async function authRoutes(fastify: FastifyInstance): Promise<void> {
       }
     });
   });
+
+  // Change password
+  fastify.put<{ Body: ChangePasswordBody }>(
+    '/api/auth/password',
+    { preHandler: [fastify.authenticate] },
+    async (request, reply) => {
+      const userId = (request.user as { id: number }).id;
+      const { currentPassword, newPassword } = request.body;
+
+      if (!currentPassword) {
+        return reply.status(400).send({ error: request.t('validation:currentPasswordRequired') });
+      }
+      if (!newPassword) {
+        return reply.status(400).send({ error: request.t('validation:passwordRequired') });
+      }
+      if (newPassword.length < 8) {
+        return reply.status(400).send({ error: request.t('validation:passwordTooShort') });
+      }
+
+      const success = await AuthService.updatePassword(userId, currentPassword, newPassword);
+      if (!success) {
+        return reply.status(401).send({ error: request.t('validation:currentPasswordInvalid') });
+      }
+
+      return reply.send({ message: request.t('common:passwordChanged') });
+    }
+  );
 
   // Update language
   fastify.put<{ Body: { language: string } }>(
