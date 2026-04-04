@@ -16,6 +16,7 @@
     "username": "Benutzername",
     "password": "Passwort",
     "loginButton": "Anmelden",
+    "rememberMe": "Eingeloggt bleiben",
     "errorInvalid": "Ungültige Anmeldedaten"
   },
   "dashboard": {

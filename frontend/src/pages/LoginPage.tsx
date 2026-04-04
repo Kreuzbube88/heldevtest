@@ -9,6 +9,7 @@ import { LogIn } from 'lucide-react';
 export function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(true);
   const { t, i18n } = useTranslation();
   const { setAuth } = useAuthStore();
   const { addToast } = useUIStore();
@@ -18,7 +19,7 @@ export function LoginPage() {
 
     try {
       const res = await api.login(username, password) as { user: { language: string }; token: string };
-      setAuth(res.user as Parameters<typeof setAuth>[0], res.token);
+      setAuth(res.user as Parameters<typeof setAuth>[0], res.token, rememberMe);
       void i18n.changeLanguage((res.user as { language: string }).language);
       window.location.href = '/';
     } catch {
@@ -75,7 +76,7 @@ export function LoginPage() {
             />
           </div>
 
-          <div style={{ marginBottom: 'var(--space-xl)' }}>
+          <div style={{ marginBottom: 'var(--space-md)' }}>
             <label>{t('ui:login.password')}</label>
             <input
               type="password"
@@ -83,6 +84,35 @@ export function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          </div>
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-sm)',
+            marginBottom: 'var(--space-xl)',
+          }}>
+            <input
+              type="checkbox"
+              id="rememberMe"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              style={{ width: '16px', height: '16px', cursor: 'pointer', flexShrink: 0 }}
+            />
+            <label
+              htmlFor="rememberMe"
+              style={{
+                margin: 0,
+                cursor: 'pointer',
+                fontSize: 'var(--text-sm)',
+                color: 'var(--color-text-secondary)',
+                textTransform: 'none',
+                letterSpacing: 'normal',
+                fontWeight: 'normal',
+              }}
+            >
+              {t('ui:login.rememberMe')}
+            </label>
           </div>
 
           <button type="submit" className="btn-primary" style={{ width: '100%' }}>

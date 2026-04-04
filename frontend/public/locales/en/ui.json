@@ -16,6 +16,7 @@
     "username": "Username",
     "password": "Password",
     "loginButton": "Login",
+    "rememberMe": "Remember me",
     "errorInvalid": "Invalid credentials"
   },
   "dashboard": {

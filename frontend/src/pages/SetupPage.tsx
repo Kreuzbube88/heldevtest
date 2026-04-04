@@ -31,7 +31,7 @@ export function SetupPage() {
 
     try {
       const res = await api.setup(username, password, language) as { user: { language: string }; token: string };
-      setAuth(res.user as Parameters<typeof setAuth>[0], res.token);
+      setAuth(res.user as Parameters<typeof setAuth>[0], res.token, true);
       void i18n.changeLanguage((res.user as { language: string }).language);
       window.location.href = '/';
     } catch {
