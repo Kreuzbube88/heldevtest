@@ -1,0 +1,42 @@
+# Dependencies
+node_modules
+npm-debug.log
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist
+build
+.next
+
+# Development
+.env.local
+.env.development
+*.log
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+.nyc_output
+
+# Temporary
+tmp
+temp
+*.tmp
+
+# Claude
+.claude
+CLAUDE.MD

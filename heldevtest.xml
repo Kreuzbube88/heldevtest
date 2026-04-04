@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>HELDEVTEST</Name>
+  <Repository>ghcr.io/kreuzbube88/heldevtest:latest</Repository>
+  <Registry>https://ghcr.io/kreuzbube88/heldevtest</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/Kreuzbube88/heldevtest/issues</Support>
+  <Project>https://github.com/Kreuzbube88/heldevtest</Project>
+  <ReadMe>https://github.com/Kreuzbube88/heldevtest/blob/main/README.md</ReadMe>
+  <Overview>HELDEVTEST is an interactive test documentation tool for manual testing workflows. Upload markdown test plans, execute tests interactively, auto-save results, and export professional reports.[br][br]
+[b]Core Features:[/b][br]
+[b]✓ Markdown Upload[/b] — Drag & drop .md test plans, automatic structure parsing[br]
+[b]✓ Interactive Testing[/b] — Checkbox-based UI with Pass/Fail/Skip status, inline bug reporting[br]
+[b]✓ Auto-Save[/b] — Never lose progress, localStorage + backend sync (500ms debounced)[br]
+[b]✓ Progress Tracking[/b] — Real-time counters, completion percentage, time tracking[br]
+[b]✓ Screenshot Support[/b] — Paste from clipboard or upload, embedded in reports[br]
+[b]✓ Export Options[/b] — Markdown (with results), HTML (shareable), JSON (automation)[br]
+[b]✓ Templates[/b] — Predefined test plans (Backend API, Frontend UI, Security, Performance)[br][br]
+[b]Session Recovery:[/b][br]
+[b]✓ Browser Crash Protection[/b] — Resume from localStorage on refresh[br]
+[b]✓ Multi-Session Support[/b] — Work on multiple test plans simultaneously[br]
+[b]✓ Session History[/b] — Review past test executions with full results[br][br]
+[b]Security:[/b][br]
+[b]✓ First-Run Setup[/b] — No default passwords, create user account on first access[br]
+[b]✓ Single-User Auth[/b] — JWT-based authentication, 24h sessions[br]
+[b]✓ Data Isolation[/b] — All test data stored locally in container[br][br]
+[b]User Experience:[/b][br]
+[b]✓ Clean UI[/b] — Professional design, desktop-optimized[br]
+[b]✓ Real-time Auto-Save[/b] — Visual feedback, never lose work[br]
+[b]✓ Fast Navigation[/b] — Previous/Next test navigation, section collapse[br][br]
+[b]First-Time Setup:[/b][br]
+1. Install container[br]
+2. Access Web UI[br]
+3. Create user account (username + password)[br]
+4. Upload test plan or select template[br]
+5. Start testing[br][br]
+[b]Use Cases:[/b][br]
+- Manual QA testing documentation[br]
+- Bug bounty program test plans[br]
+- Regression testing workflows[br]
+- Security audit checklists[br]
+- Unraid container testing (like HELBACKUP validation)[br][br]
+[b]Documentation:[/b] https://github.com/Kreuzbube88/heldevtest</Overview>
+  <Category>Tools:Testing</Category>
+  <WebUI>http://[IP]:[PORT:3001]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/Kreuzbube88/heltemplates/main/heldevtest.xml</TemplateURL>
+  <Icon>https://github.com/Kreuzbube88/heldevtest/blob/main/frontend/public/favicon.png?raw=true</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled></DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  
+  <Config Name="Web UI Port" Target="3001" Default="3001" Mode="tcp"
+    Description="Port for the HELDEVTEST web interface"
+    Type="Port" Display="always" Required="true" Mask="false">3001</Config>
+  
+  <Config Name="Data" Target="/app/data" Default="/mnt/user/appdata/heldevtest" Mode="rw"
+    Description="Database, sessions, screenshots and configuration"
+    Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/heldevtest</Config>
+  
+  <Config Name="JWT_SECRET" Target="JWT_SECRET" Default="" Mode=""
+    Description="Required: Random secret for authentication. Generate with: openssl rand -hex 32"
+    Type="Variable" Display="always" Required="true" Mask="true"></Config>
+  
+  <Config Name="TZ" Target="TZ" Default="Europe/Berlin" Mode=""
+    Description="Timezone for timestamps (e.g., Europe/Berlin, America/New_York)"
+    Type="Variable" Display="always" Required="false" Mask="false">Europe/Berlin</Config>
+  
+  <Config Name="LOG_LEVEL" Target="LOG_LEVEL" Default="info" Mode=""
+    Description="Log verbosity: debug, info, warn, error"
+    Type="Variable" Display="advanced" Required="false" Mask="false">info</Config>
+  
+  <TailscaleStateDir/>
+</Container>

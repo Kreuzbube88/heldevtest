@@ -1,7 +1,14 @@
 {
   "name": "heldevtest-frontend",
   "version": "1.0.0",
+  "description": "HELDEVTEST Frontend - Test documentation tool",
   "type": "module",
+  "author": "Kreuzbube88",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kreuzbube88/heldevtest"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
