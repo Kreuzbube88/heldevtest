@@ -1,0 +1,105 @@
+name: 🌐 Translation/i18n Issue
+description: Report translation errors or missing translations
+title: "[i18n] "
+labels: ["i18n", "translation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🌐 Translation/i18n Issue
+
+        Help us speak your language better!
+
+        ---
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: 🗣️ Language
+      options:
+        - 🇩🇪 German (de)
+        - 🇬🇧 English (en)
+        - 🇫🇷 French (fr) - Request new
+        - 🇪🇸 Spanish (es) - Request new
+        - 🇮🇹 Italian (it) - Request new
+        - 🇵🇹 Portuguese (pt) - Request new
+        - 🇯🇵 Japanese (ja) - Request new
+        - 🇨🇳 Chinese (zh) - Request new
+        - 🌍 Other (specify below)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: 🏷️ Issue Type
+      options:
+        - ❌ Missing translation (shows key instead of text)
+        - ⚠️ Incorrect translation (wrong meaning)
+        - 😕 Awkward/unnatural phrasing
+        - 🔄 Inconsistent terminology
+        - ✏️ Grammar/spelling error
+        - 🌍 Request new language support
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: 📍 Location
+      description: Where in the app is this issue?
+      placeholder: "e.g., Login page - Submit button, Settings - Language selector"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: ❌ Current Text
+      description: What text is currently shown?
+      placeholder: |
+        Current (German): "Einloggen Sie sich"
+        or
+        Shows key: "ui.login.submit"
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ✅ Expected/Correct Text
+      description: What should it say?
+      placeholder: |
+        Should be (German): "Melden Sie sich an"
+        or
+        Should show: "Anmelden"
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 📸 Context
+      description: Screenshots or additional context to help understand the issue
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: 🤝 Contribution
+      options:
+        - label: I am a native speaker and can help with translations
+        - label: I can review/proofread translations
+        - label: I can help add a new language
+
+  - type: textarea
+    id: new_language
+    attributes:
+      label: 🌍 New Language Details (if requesting new language)
+      description: If requesting a new language, tell us more
+      placeholder: |
+        Language: Portuguese (Brazilian)
+        Locale code: pt-BR
+        I can help with: Initial translation / Review / Both
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        🌍 **Thanks for helping HELDEVTEST speak more languages!**

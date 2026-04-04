@@ -1,0 +1,104 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🐛 Bug Report
+
+        Thank you for taking the time to report a bug! Your feedback helps make HELDEVTEST better.
+
+        ---
+
+  - type: input
+    id: version
+    attributes:
+      label: 📦 HELDEVTEST Version
+      description: Which version are you using?
+      placeholder: "e.g., latest, v1.0.0, or Docker tag"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: 🖥️ Environment
+      description: Where are you running HELDEVTEST?
+      options:
+        - 🏠 Docker (Unraid)
+        - 🐳 Docker (Other)
+        - 🔧 Manual installation
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Bug Description
+      description: Clear and concise description of what went wrong
+      placeholder: "When I click X, Y happens instead of Z..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 🔄 Steps to Reproduce
+      description: Step-by-step instructions to reproduce the bug
+      placeholder: |
+        1. Go to Dashboard
+        2. Click on 'Upload Test'
+        3. Select .md file
+        4. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ✅ Expected Behavior
+      description: What should happen?
+      placeholder: "The file should upload and appear in the session list..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: ❌ Actual Behavior
+      description: What actually happens?
+      placeholder: "Instead, an error toast appears saying..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 📋 Logs / Error Messages
+      description: |
+        Paste relevant logs or error messages:
+        - **Docker**: `docker logs heldevtest`
+        - **Browser**: Open DevTools → Console tab
+      placeholder: "Paste logs here..."
+      render: shell
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 📸 Screenshots
+      description: If applicable, add screenshots to help explain the problem
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 💬 Additional Context
+      description: Any other relevant information (browser, OS, custom configuration, etc.)
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        🙏 **Thank you for helping us improve HELDEVTEST!**

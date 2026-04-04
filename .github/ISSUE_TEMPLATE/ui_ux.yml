@@ -1,0 +1,93 @@
+name: 🎨 UI/UX Improvement
+description: Suggest improvements to user interface or experience
+title: "[UI/UX] "
+labels: ["ui/ux", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🎨 UI/UX Improvement
+
+        Help us make HELDEVTEST beautiful and intuitive!
+
+        ---
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: 🖼️ UI Area
+      options:
+        - 🚀 Setup Page
+        - 🔐 Login Page
+        - 📊 Dashboard
+        - 🧪 Test Execution (Session Page)
+        - ⚙️ Settings
+        - 📋 Templates
+        - 🧭 Header/Navigation
+        - 🎨 Theme/Colors
+        - 📱 Mobile Responsiveness
+        - ♿ Accessibility
+        - 🎯 Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: 🏷️ Issue Type
+      options:
+        - 🎭 Design inconsistency
+        - 🤷 Confusing workflow
+        - 🔍 Hard to find feature
+        - 📱 Poor mobile experience
+        - ♿ Accessibility issue
+        - 🐛 Visual bug
+        - 🎯 Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: 📸 Current Behavior
+      description: What's the current UI/UX issue?
+      placeholder: "Currently the 'Delete' button is barely visible because it uses gray color..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: 💡 Proposed Improvement
+      description: How would you improve it?
+      placeholder: "It would be better if the Delete button was red and had a confirmation dialog..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: 🎨 Mockups / Screenshots
+      description: |
+        Add screenshots or mockups:
+        - **Before**: Current state
+        - **After**: Your proposed design
+        - **Inspiration**: Similar UI from other tools
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: 📈 User Impact
+      options:
+        - 🔴 High - Affects many users frequently
+        - 🟡 Medium - Affects some users occasionally
+        - 🟢 Low - Minor polish/refinement
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ✨ **Thanks for making HELDEVTEST more user-friendly!**

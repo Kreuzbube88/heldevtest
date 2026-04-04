@@ -1,0 +1,97 @@
+name: 🔒 Security Vulnerability
+description: Report a security issue (please use private disclosure for critical issues)
+title: "[SECURITY] "
+labels: ["security"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🔒 Security Vulnerability
+
+        **⚠️ IMPORTANT: For critical security vulnerabilities, please report privately:**
+
+        👉 Use [GitHub Security Advisories](https://github.com/Kreuzbube88/heldevtest/security/advisories/new) for responsible disclosure
+
+        Only use this public form for **low-severity** issues that don't pose immediate risk.
+
+        ---
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: 🚨 Severity Assessment
+      options:
+        - 🟢 Low - Minimal impact, no immediate risk
+        - 🟡 Medium - Moderate impact, limited exposure
+        - 🟠 High - Significant impact, should be fixed soon
+        - 🔴 Critical - Immediate action required (use private disclosure!)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 🏷️ Vulnerability Category
+      options:
+        - 🔐 Authentication bypass
+        - 💉 SQL injection
+        - 🎭 XSS (Cross-Site Scripting)
+        - 🔄 CSRF (Cross-Site Request Forgery)
+        - 📢 Information disclosure
+        - ⚙️ Insecure configuration
+        - 📦 Dependency vulnerability
+        - 🔓 Weak encryption/hashing
+        - 🌐 API security
+        - 🎯 Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Vulnerability Description
+      description: Describe the security issue (avoid detailed exploit code for critical issues)
+      placeholder: "The JWT token validation doesn't properly check..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: ⚠️ Potential Impact
+      description: What could an attacker accomplish?
+      placeholder: "An attacker could gain unauthorized access to..."
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 🔬 Proof of Concept
+      description: High-level steps to demonstrate (be responsible with details)
+      placeholder: |
+        1. Send modified request to...
+        2. Observe that...
+        3. This allows...
+
+  - type: textarea
+    id: mitigation
+    attributes:
+      label: 💡 Suggested Fix
+      description: Any recommendations for mitigation or fixes?
+      placeholder: "Consider adding input validation for..."
+
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: 🤝 Responsible Disclosure
+      options:
+        - label: I have NOT publicly disclosed this vulnerability
+          required: true
+        - label: I am willing to wait for a fix before public disclosure
+        - label: I can provide more details privately if needed
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        🛡️ **Thank you for helping keep HELDEVTEST secure!**

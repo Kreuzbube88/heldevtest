@@ -1,0 +1,75 @@
+name: 📚 Documentation Issue
+description: Report missing, unclear, or incorrect documentation
+title: "[DOCS] "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 📚 Documentation Issue
+
+        Help us improve the documentation! Clear docs = happy users.
+
+        ---
+
+  - type: dropdown
+    id: location
+    attributes:
+      label: 📍 Documentation Location
+      description: Where is the documentation issue?
+      options:
+        - 📖 README.md
+        - 🚀 docs/installation.md
+        - 📘 docs/usage.md
+        - 🐳 docs/deployment.md
+        - 💻 Code comments
+        - 🏠 Unraid template description
+        - 🔗 API documentation
+        - ❓ FAQ section
+        - 🎯 Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: 🏷️ Issue Type
+      options:
+        - ❌ Missing documentation
+        - 😕 Unclear/confusing explanation
+        - ⚠️ Incorrect information
+        - ⏰ Outdated information
+        - ✏️ Typo/grammar
+        - 🌐 Missing translation
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Description
+      description: What's wrong with the documentation?
+      placeholder: "The installation guide doesn't mention that you need to set JWT_SECRET..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 💡 Suggested Improvement
+      description: How should it be fixed or improved?
+      placeholder: "Add a note in the installation section explaining..."
+
+  - type: input
+    id: link
+    attributes:
+      label: 🔗 Link to Documentation
+      description: Direct link or file path
+      placeholder: "https://github.com/Kreuzbube88/heldevtest/blob/main/README.md#installation"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        📝 **Thanks for helping make our docs better!**

@@ -1,0 +1,89 @@
+name: ⚡ Performance Issue
+description: Report slow performance, high resource usage, or lag
+title: "[PERFORMANCE] "
+labels: ["performance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # ⚡ Performance Issue
+
+        Help us make HELDEVTEST faster and more efficient!
+
+        ---
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: 🎯 Performance Area
+      options:
+        - 🚀 Initial page load
+        - 🧪 Test execution (rendering)
+        - 💾 Auto-save
+        - 📤 Export functionality
+        - 🗄️ Database queries
+        - 📁 File upload
+        - 🧠 Memory usage
+        - 💻 CPU usage
+        - 🌐 Network requests
+        - 🎨 UI rendering/animations
+        - 🔄 Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Performance Issue
+      description: What's slow or resource-intensive?
+      placeholder: "When I have 100+ tests, the session page becomes very slow and unresponsive..."
+    validations:
+      required: true
+
+  - type: input
+    id: dataset
+    attributes:
+      label: 📊 Dataset Size
+      description: How many sessions/tests are involved?
+      placeholder: "e.g., 5 sessions with ~200 tests each"
+
+  - type: textarea
+    id: system
+    attributes:
+      label: 🖥️ System Specs
+      description: What hardware/environment are you running on?
+      value: |
+        - CPU:
+        - RAM:
+        - Platform:
+        - Browser:
+        - Other containers:
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: 📈 Performance Metrics
+      description: Any measurements you can provide?
+      placeholder: |
+        - Page load time: 8 seconds
+        - Memory usage: 800MB
+        - Browser DevTools Performance tab results
+        - docker stats output
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 🔄 Steps to Reproduce
+      description: How can we reproduce the performance issue?
+      placeholder: |
+        1. Create session with large test file (200+ tests)
+        2. Execute 50 tests rapidly
+        3. Notice significant lag when scrolling
+        4. Browser becomes unresponsive after 5 minutes
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        🚀 **Thanks for helping us optimize HELDEVTEST!**

@@ -1,0 +1,120 @@
+name: 🐳 Docker/Deployment Issue
+description: Issues with Docker container, deployment, or configuration
+title: "[DOCKER] "
+labels: ["docker", "deployment"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🐳 Docker/Deployment Issue
+
+        Having trouble getting HELDEVTEST running? Let's fix it!
+
+        ---
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 🖥️ Deployment Platform
+      options:
+        - 🏠 Unraid
+        - 📦 Docker Compose
+        - 🐳 Docker CLI
+        - 🎛️ Portainer
+        - ☸️ Kubernetes
+        - 🎯 Other
+    validations:
+      required: true
+
+  - type: input
+    id: docker_version
+    attributes:
+      label: 🐳 Docker Version
+      description: Run `docker --version`
+      placeholder: "Docker version 24.0.6"
+    validations:
+      required: true
+
+  - type: input
+    id: image_tag
+    attributes:
+      label: 🏷️ HELDEVTEST Image Tag
+      placeholder: "e.g., latest, v1.0.0, dev"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: 🎯 Issue Type
+      options:
+        - 🚫 Container won't start
+        - ❤️ Health check failing
+        - 💾 Volume/mount issues
+        - 🔌 Port mapping issues
+        - ⚙️ Environment variable issues
+        - 🔄 Update/rebuild issues
+        - 🌐 Network connectivity
+        - 📊 Database persistence
+        - 🎨 Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Issue Description
+      description: What's wrong with deployment?
+      placeholder: "After running docker-compose up, the container starts but immediately exits..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: ⚙️ Configuration
+      description: Paste your docker-compose.yml, docker run command, or Unraid template config
+      placeholder: |
+        version: '3.8'
+        services:
+          heldevtest:
+            image: ghcr.io/kreuzbube88/heldevtest:latest
+            ...
+      render: yaml
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 📋 Container Logs
+      description: Run `docker logs heldevtest` and paste the output
+      placeholder: "Paste container logs here..."
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 🔄 Steps to Reproduce
+      placeholder: |
+        1. docker-compose down
+        2. docker-compose pull
+        3. docker-compose up -d
+        4. docker logs heldevtest shows error...
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 💬 Additional Context
+      description: Host OS, other containers, custom network setup, etc.
+      placeholder: |
+        - Host OS: Unraid 6.12.6
+        - Other running containers: 20+
+        - Custom network: macvlan
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        🚢 **Thanks for reporting! We'll get you up and running!**
