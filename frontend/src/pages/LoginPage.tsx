@@ -4,7 +4,7 @@ import { useAuthStore } from '../stores/authStore';
 import { useUIStore } from '../stores/uiStore';
 import { api } from '../api/api';
 import { ThemeSwitcher } from '../components/ThemeSwitcher';
-import { LogIn, Shield } from 'lucide-react';
+import { LogIn } from 'lucide-react';
 
 export function LoginPage() {
   const [username, setUsername] = useState('');
@@ -59,12 +59,8 @@ export function LoginPage() {
           <img
             src="/logo.png"
             alt="HELDEVTEST"
-            style={{ height: '120px', display: 'block', margin: '0 auto var(--space-md)' }}
+            style={{ width: '240px', maxWidth: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
           />
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-sm)' }}>
-            <Shield size={18} color="var(--color-primary-solid)" />
-          </div>
-          <h1 style={{ marginBottom: 0 }}>{t('ui:login.title')}</h1>
         </div>
 
         <form onSubmit={(e) => { void handleSubmit(e); }}>

@@ -39,18 +39,7 @@ export function Header() {
         to="/"
         style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', textDecoration: 'none' }}
       >
-        <img src="/logo.png" alt="HELDEVTEST" style={{ height: '32px' }} />
-        <span style={{
-          fontFamily: 'var(--font-display)',
-          fontWeight: 800,
-          fontSize: 'var(--text-lg)',
-          background: 'var(--color-primary)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-        }}>
-          HELDEVTEST
-        </span>
+        <img src="/logo.png" alt="HELDEVTEST" style={{ height: '40px', width: 'auto' }} />
       </Link>
 
       <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center' }}>

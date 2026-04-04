@@ -5,7 +5,7 @@ import { useUIStore } from '../stores/uiStore';
 import { api } from '../api/api';
 import { LanguageSelector } from '../components/LanguageSelector';
 import { ThemeSwitcher } from '../components/ThemeSwitcher';
-import { ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 
 export function SetupPage() {
   const [step, setStep] = useState(1);
@@ -73,12 +73,8 @@ export function SetupPage() {
           <img
             src="/logo.png"
             alt="HELDEVTEST"
-            style={{ height: '120px', display: 'block', margin: '0 auto var(--space-md)' }}
+            style={{ width: '280px', maxWidth: '100%', height: 'auto', display: 'block', margin: '0 auto var(--space-sm)' }}
           />
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-sm)' }}>
-            <Sparkles size={18} color="var(--color-primary-solid)" />
-          </div>
-          <h1 style={{ marginBottom: 0 }}>{t('ui:setup.title')}</h1>
         </div>
 
         {/* Step indicators */}
