@@ -15,13 +15,17 @@
 ## 📚 Table of Contents
 
 - [First-Run Setup](#first-run-setup)
-- [Upload Test](#upload-test)
+- [Upload Test Plan](#upload-test-plan)
+- [MD Builder](#md-builder)
 - [Execute Tests](#execute-tests)
+- [Keyboard Shortcuts](#keyboard-shortcuts)
+- [Quick Actions & Bulk](#quick-actions--bulk)
+- [Bug Templates](#bug-templates)
 - [Auto-Save](#auto-save)
 - [Export](#export)
 - [Templates](#templates)
 - [Manage Sessions](#manage-sessions)
-- [Change Language](#change-language)
+- [Settings](#settings)
 
 ---
 
@@ -48,7 +52,7 @@ After setup you are automatically logged in and redirected to the dashboard.
 
 ---
 
-## 📝 Upload Test
+## 📝 Upload Test Plan
 
 ### Test Plan Format
 
@@ -74,36 +78,43 @@ HELDEVTEST expects Markdown files (`.md`) with a structured hierarchy:
 ### Upload Steps
 
 1. Open Dashboard
-2. Click **"Upload Test"** button
-3. Select `.md` file (max. 5MB)
-4. HELDEVTEST automatically parses the structure
-5. Test session is created and opened
+2. Drag & Drop a `.md` file onto the upload area, or click **"Upload Test"**
+3. If HELDEVTEST detects structural issues, the **Import Wizard** opens
+4. Select a resolution strategy for each problem (Skip / Import Empty / Convert to Freetext)
+5. Session is created and opened
 
-### Example Test Plan
+### Import Wizard
 
-```markdown
-# Backend API Testing v1.0
+The Import Wizard automatically detects problems in your Markdown file and offers three resolution strategies per issue:
 
-## 1. Authentication
+| Strategy | Description |
+|----------|-------------|
+| **Skip** | Ignore the problematic section entirely |
+| **Import Empty** | Include the section without any tests |
+| **Convert to Freetext** | Turn the section into a free-text note field |
 
-### 1.1 Login
+---
 
-- [ ] **Test 1.1.1:** Successful login with valid credentials
-- [ ] **Test 1.1.2:** Login fails with wrong password
-- [ ] **Test 1.1.3:** Login fails with empty username
+## 🛠️ MD Builder
 
-### 1.2 Logout
+Create test plans from scratch without writing Markdown manually.
 
-- [ ] **Test 1.2.1:** Successful logout
-- [ ] **Test 1.2.2:** JWT token is invalid after logout
+### Steps
 
-## 2. User Management
+1. Open **"MD Builder"** from the navigation
+2. Click **"Add Section"** → Section Wizard opens
+3. Enter a **title** and choose **type** (Test Checklist or Freetext Note)
+4. Add tests to Test sections, or write notes in Freetext sections
+5. Reorder sections with the Up/Down arrows (drag & drop)
+6. Preview the generated Markdown in the **Live Preview** panel
+7. Click **"Download"** to save as `.md`, or **"Save as Template"**
 
-### 2.1 Profile
+### Section Types
 
-- [ ] **Test 2.1.1:** Retrieve user profile
-- [ ] **Test 2.1.2:** Change password
-```
+| Type | Description |
+|------|-------------|
+| **Test Checklist** | Standard checklist with Pass/Fail/Skip tests |
+| **Freetext Note** | Free-text field for notes, context, or instructions |
 
 ---
 
@@ -119,20 +130,20 @@ For each test you can set one of three statuses:
 | **Fail** | ✗ red | Test failed |
 | **Skip** | ⊘ gray | Test not executed |
 
-Click the corresponding button next to the test.
+Click the corresponding button next to the test, or use keyboard shortcuts.
 
 ### Bug Documentation
 
 For failed tests:
-1. Enter bug description in the text field
-2. Include as many details as needed (error message, reproduction steps, etc.)
-3. Saved automatically
+1. Set status to **Fail**
+2. Optionally select a **Bug Template** from the dropdown
+3. Fill in the pre-populated template or write a custom description
+4. Saved automatically
 
 ### Record Test Duration
 
-- Enter duration in **seconds**
-- Optional – can be left empty
-- Helps with performance analysis of test execution
+- Click the **Timer** button to start/stop the timer, or enter seconds manually
+- Optional — can be left empty
 
 ### Progress Overview
 
@@ -146,6 +157,69 @@ At the top of the test page you see in real-time:
 | **Failed** | Tests with status "Fail" |
 | **Skipped** | Tests with status "Skip" |
 | **Progress bar** | Visual percentage |
+
+### Filter & Search
+
+- **Search bar** (`/` to focus): Filter tests by name (300ms debounce)
+- **Status filter:** Show only pending / pass / fail / skip tests
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `n` | Next unfinished test |
+| `p` | Previous test |
+| `1` | Mark current test as Pass |
+| `2` | Mark current test as Fail |
+| `3` | Mark current test as Skip |
+| `s` | Save manually |
+| `/` | Focus search bar |
+| `Esc` | Close open dialog |
+| `Ctrl+E` | Open export menu |
+| `Ctrl+A` | Select all tests (Bulk Mode) |
+| `Ctrl+D` | Deselect all tests |
+
+---
+
+## 🖱️ Quick Actions & Bulk
+
+### Right-Click Context Menu
+
+Right-click any test to open the Quick Actions menu:
+
+- Copy test name
+- Mark as Pass / Fail / Skip
+- Start / stop timer
+
+### Bulk Actions
+
+1. Press `Ctrl+A` or activate **Bulk Mode**
+2. Select individual tests by clicking their checkboxes
+3. Use the bulk action bar to mark all selected tests as Pass / Fail / Skip
+4. Press `Ctrl+D` to deselect all
+
+---
+
+## 🐛 Bug Templates
+
+When a test fails, you can use pre-filled bug templates to speed up documentation.
+
+### Available Templates
+
+| Template | Fields |
+|----------|--------|
+| **Default** | Steps to Reproduce / Expected / Actual |
+| **Crash / Error** | Error Message / Stack Trace / Steps |
+| **Visual Bug** | Browser / Screenshot / Description |
+
+### Usage
+
+1. Set test status to **Fail**
+2. Select a template from the **Bug Template** dropdown
+3. The template is loaded into the text area
+4. Fill in the details and save
 
 ---
 
@@ -186,7 +260,7 @@ In the top bar you see:
 
 ```markdown
 # Backend API Testing v1.0
-**Date:** 2026-04-04
+**Date:** 2026-04-05
 **Status:** ✓ Completed
 
 ## Summary
@@ -218,7 +292,7 @@ In the top bar you see:
   "session": {
     "id": 1,
     "name": "Backend API Testing v1.0",
-    "created_at": "2026-04-04T10:00:00Z",
+    "created_at": "2026-04-05T10:00:00Z",
     "status": "completed"
   },
   "summary": {
@@ -234,7 +308,7 @@ In the top bar you see:
 ### Perform Export
 
 1. Open test session
-2. Click **"Export"** button
+2. Click **"Export"** button or press `Ctrl+E`
 3. Choose format: **MD** / **HTML** / **JSON**
 4. Download starts automatically
 
@@ -262,7 +336,7 @@ In the top bar you see:
 
 ### Save Custom Template
 
-1. Open test session with desired structure
+1. Open test session with desired structure, or build one in the MD Builder
 2. Click **"Save as Template"**
 3. Enter name and description
 4. **"Save"** – template is now available
@@ -274,14 +348,27 @@ In the top bar you see:
 ### Session Overview (Dashboard)
 
 The dashboard shows all test sessions:
-- **Name** of the session (filename on upload)
-- **Status** (Running / Completed)
+- **Name** of the session
+- **Status** (Running / Completed / Archived)
 - **Progress** (x/y tests completed)
 - **Date** (Created / Last modified)
 
 ### Open Session
 
-Click on the session card or name.
+Click on the session card.
+
+### Clone Session
+
+1. Session card → **Clone** (copy icon)
+2. A new session is created with the same structure but no results
+3. Useful for regression tests on new software versions
+
+### Archive Session
+
+1. Session card → **Archive** button
+2. Session is hidden from the main list
+3. Enable **"Show Archived"** filter to see archived sessions
+4. Archive can be undone with the **Unarchive** button
 
 ### Delete Session
 
@@ -294,30 +381,34 @@ Click on the session card or name.
 ### Rename Session
 
 1. Open session
-2. Click session name (in header)
-3. Enter new name
+2. Click the session name in the header
+3. Enter a new name
 4. Press Enter or click outside to save
 
 ---
 
-## 🌍 Change Language
+## ⚙️ Settings
 
-### Via Settings
+### Language
 
 1. Open **Settings** (gear icon)
 2. Select **"Language"**
 3. Choose **German** or **English**
 4. Page reloads with new language
 
-### During First-Run Setup
+### Dark Mode
 
-Language can be selected during initial setup (Step 1).
+Toggle the **theme switcher** in the header to switch between light and dark mode. The preference is saved in localStorage.
 
-### Persistence
+### Accent Color
 
-- Language setting is saved in the database
-- Persists across browser sessions
-- Restored on each login
+Open **Settings** → **Accent Color** to customize the application's accent color.
+
+### Database Backup
+
+1. Open **Settings**
+2. Click **"Download Backup"**
+3. The SQLite `.db` file is downloaded — store it safely
 
 <div align="center">
 

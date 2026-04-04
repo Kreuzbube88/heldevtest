@@ -32,35 +32,97 @@ HELDEVTEST is a modern tool for interactive execution and documentation of softw
 
 ## ✨ Features | Funktionen
 
-### 🇩🇪 Hauptfunktionen
+### 🎯 Session Management
 
-| Feature | Beschreibung |
-|---------|-------------|
-| 📝 **Markdown-Upload** | Laden Sie strukturierte `.md` Testpläne hoch – automatische Erkennung der Test-Hierarchie |
-| ✅ **Interaktive Ausführung** | Markieren Sie Tests als ✓ Bestanden / ✗ Fehlgeschlagen / ⊘ Übersprungen |
-| 🐛 **Bug-Tracking** | Erfassen Sie Fehler direkt beim Test mit Freitextfeldern |
-| ⏱️ **Zeit-Erfassung** | Dokumentieren Sie Testdauer in Sekunden |
-| 💾 **Auto-Save** | Änderungen werden sofort lokal (localStorage) + nach 500ms im Backend gespeichert |
-| 📊 **Export** | Exportieren Sie Ergebnisse als **Markdown**, **HTML** oder **JSON** |
-| 📋 **Templates** | 5 vorgefertigte Vorlagen (Backend API, Frontend UI, Security, Performance, Unraid) |
-| 🌍 **i18n** | Vollständig zweisprachig: **Deutsch** (Standard) + **Englisch** |
-| 🔐 **Single-User Auth** | First-Run Setup mit Benutzername + Passwort (JWT-basiert) |
-| 📈 **Fortschritts-Tracking** | Echtzeit-Übersicht: Gesamt / Abgeschlossen / Bestanden / Fehlgeschlagen |
+| Feature | DE | EN |
+|---------|----|----|
+| Markdown-Upload | Strukturierte `.md` Testpläne hochladen | Upload structured `.md` test plans |
+| Import Wizard | Automatische Problem-Erkennung + 3 Lösungsstrategien (Skip / Import Empty / Convert to Freetext) | Auto problem detection + 3 resolution strategies |
+| Freetext Sections | Freie Notizfelder neben Test-Checklisten | Free-text note sections alongside test checklists |
+| Session Cloning | Session kopieren (Struktur ohne Ergebnisse) | Clone session (structure without results) |
+| Session Archivierung | Sessions archivieren und ausblenden | Archive and hide sessions |
+| Lazy Loading | Dashboard paginiert (20 Sessions pro Seite) | Paginated dashboard (20 sessions per page) |
+| Fortschritts-Tracking | Echtzeit: Gesamt / Abgeschlossen / Pass / Fail | Real-time: Total / Completed / Pass / Fail |
+| Auto-Save | localStorage (sofort) + Backend (500ms Debounce) | localStorage (instant) + backend (500ms debounce) |
 
-### 🇬🇧 Key Features
+### 📝 Test Execution
 
-| Feature | Description |
-|---------|-------------|
-| 📝 **Markdown Upload** | Upload structured `.md` test plans – automatic test hierarchy detection |
-| ✅ **Interactive Execution** | Mark tests as ✓ Pass / ✗ Fail / ⊘ Skip |
-| 🐛 **Bug Tracking** | Document bugs directly during testing with free-text fields |
-| ⏱️ **Time Tracking** | Record test duration in seconds |
-| 💾 **Auto-Save** | Changes saved instantly (localStorage) + after 500ms to backend |
-| 📊 **Export** | Export results as **Markdown**, **HTML**, or **JSON** |
-| 📋 **Templates** | 5 pre-built templates (Backend API, Frontend UI, Security, Performance, Unraid) |
-| 🌍 **i18n** | Fully bilingual: **German** (default) + **English** |
-| 🔐 **Single-User Auth** | First-run setup with username + password (JWT-based) |
-| 📈 **Progress Tracking** | Real-time overview: Total / Completed / Passed / Failed |
+| Feature | DE | EN |
+|---------|----|----|
+| Status Tracking | Pass / Fail / Skip pro Test | Pass / Fail / Skip per test |
+| Bug-Dokumentation | Freitext-Fehlerfeld pro Test | Free-text bug field per test |
+| Bug Templates | 3 vorgefertigte Vorlagen (Default / Crash / Visual Bug) | 3 pre-filled templates (Default / Crash / Visual Bug) |
+| Test Timer | Optionale Zeitmessung pro Test | Optional timer per test |
+| Virtual Scrolling | react-window bei >50 Tests | react-window for >50 tests |
+| Test-Filter & Suche | Status-Filter + Textsuche (300ms Debounce) | Status filter + text search (300ms debounce) |
+| Bulk Actions | Mehrfachauswahl + Mark all Pass/Fail/Skip | Multi-select + mark all Pass/Fail/Skip |
+| Quick Actions | Rechtsklick-Kontextmenü pro Test | Right-click context menu per test |
+| Keyboard Shortcuts | n / p / 1 / 2 / 3 / s / / / Esc / Ctrl+E / Ctrl+A / Ctrl+D | See table below |
+
+**Keyboard Shortcuts:**
+
+| Key | Action |
+|-----|--------|
+| `n` | Next unfinished test |
+| `p` | Previous test |
+| `1` | Mark as Pass |
+| `2` | Mark as Fail |
+| `3` | Mark as Skip |
+| `s` | Save |
+| `/` | Focus search |
+| `Esc` | Close dialog |
+| `Ctrl+E` | Export menu |
+| `Ctrl+A` | Select all tests |
+| `Ctrl+D` | Deselect all |
+
+### 🛠️ MD Builder
+
+| Feature | DE | EN |
+|---------|----|----|
+| Drag & Drop Erstellung | Sections per Drag & Drop sortieren | Drag & Drop section reordering |
+| Section Wizard | Title + Type auswählen (Test / Freetext) | Title + type selection (Test / Freetext) |
+| Test-Sections | Checklisten-Sections | Checklist sections |
+| Freetext-Sections | Notiz-Sections | Note sections |
+| Live Preview | Vorschau des generierten Markdowns | Preview of generated markdown |
+| Download | Als `.md` herunterladen | Download as `.md` |
+| Als Vorlage speichern | In Template-Bibliothek speichern | Save to template library |
+
+### 📊 Export & Templates
+
+| Feature | DE | EN |
+|---------|----|----|
+| Markdown Export | Testplan mit ausgefüllten Ergebnissen + Summary | Test plan with filled results + summary |
+| HTML Export | Self-contained Report (inline CSS) | Self-contained report (inline CSS) |
+| JSON Export | Strukturierte Daten | Structured data |
+| 5 Vorlagen | Backend API / Frontend UI / Security / Performance / Unraid | Backend API / Frontend UI / Security / Performance / Unraid |
+| Custom Templates | Eigene Vorlagen speichern | Save custom templates |
+
+### 🎨 UI/UX
+
+| Feature | DE | EN |
+|---------|----|----|
+| Dark Mode | Manueller Toggle (gespeichert in localStorage) | Manual toggle (saved in localStorage) |
+| Accent Color | Anpassbare Akzentfarbe | Customizable accent color |
+| Toast System | Top-right, auto-dismiss 3–5s | Top-right, auto-dismiss 3–5s |
+| Confirm Dialogs | Modal für destruktive Aktionen | Modal for destructive actions |
+| Session Timeout | Warnung 5 Min vor Logout | Warning 5 min before logout |
+| Focus Indicators | Barrierefreiheit (Accessibility) | Accessibility focus indicators |
+
+### 🔒 Security & DevOps
+
+| Feature | DE | EN |
+|---------|----|----|
+| JWT Auth | 24h Token, bcrypt (12 Runden) | 24h token, bcrypt (12 rounds) |
+| Rate Limiting | Login: 5/15min, API: 20/min | Login: 5/15min, API: 20/min |
+| DB Backup | SQLite `.db` Download | SQLite `.db` download |
+| Docker Health Check | GET /health prüft DB-Verbindung | GET /health checks DB connection |
+| Input Sanitization | Upload-Validierung (.md only) | Upload validation (.md only) |
+
+### 🌐 Internationalization
+
+- **Deutsch** (Standard / Default)
+- **English** (Fallback)
+- Sprachauswahl beim First-Run Setup + jederzeit in Settings
 
 ---
 
@@ -125,6 +187,7 @@ XML Template: `heldevtest.xml`
 | **i18n Backend** | i18next + i18next-http-middleware |
 | **Frontend** | React 18 + Vite 5 + TypeScript |
 | **State** | Zustand |
+| **Virtual Scrolling** | react-window |
 | **i18n Frontend** | react-i18next |
 | **Icons** | lucide-react |
 
@@ -139,15 +202,16 @@ heldevtest/
 │   │   ├── database/       # SQLite Schema + Connection
 │   │   ├── services/       # Business Logic (Auth, Parser, Export)
 │   │   ├── routes/         # API Endpoints
-│   │   ├── middleware/     # Auth + Error Handling
+│   │   ├── middleware/     # Auth + Rate Limiting + Error Handling
 │   │   ├── i18n.ts         # Backend i18n Config
 │   │   └── server.ts       # Fastify Server
 │   └── locales/            # Translations (de/en)
 ├── frontend/               # React Frontend
 │   ├── src/
 │   │   ├── pages/          # React Pages
-│   │   ├── components/     # Reusable Components
+│   │   ├── components/     # Reusable Components + Builder
 │   │   ├── stores/         # Zustand Stores
+│   │   ├── hooks/          # Custom Hooks (Keyboard, Debounce)
 │   │   ├── api/            # API Client
 │   │   └── styles/         # Design System
 │   └── public/
@@ -185,6 +249,35 @@ cd frontend && npm install && npm run dev  # http://localhost:3000
 | `DB_PATH` | `data/heldevtest.db` | SQLite Database Path |
 | `JWT_SECRET` | **(required)** | JWT Signing Secret |
 | `NODE_ENV` | `production` | Node Environment |
+
+---
+
+## 🔌 API
+
+```
+POST /api/auth/setup          First-run user setup
+POST /api/auth/login          Login
+POST /api/auth/check          Token validation
+
+GET  /api/sessions            List sessions (paginated)
+GET  /api/sessions/:id        Get session
+POST /api/sessions/upload     Upload .md file
+POST /api/sessions/:id/clone  Clone session
+PUT  /api/sessions/:id        Update session
+PUT  /api/sessions/:id/archive    Archive session
+PUT  /api/sessions/:id/unarchive  Unarchive session
+DELETE /api/sessions/:id      Delete session
+
+GET  /api/templates           List templates
+POST /api/templates           Create template
+DELETE /api/templates/:id     Delete template
+
+GET  /api/export/:id/:format  Export session (md/html/json)
+
+GET  /api/backup/download     Download SQLite database
+
+GET  /health                  Health check
+```
 
 ---
 

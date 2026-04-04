@@ -46,28 +46,72 @@ Write your test plans in familiar Markdown format:
 
 HELDEVTEST automatically detects the structure and creates an interactive test interface.
 
+#### 🧙 Import Wizard
+
+When uploading a Markdown file, HELDEVTEST automatically detects structural problems (empty sections, unsupported formats). An Import Wizard offers three resolution strategies:
+
+- **Skip** — ignore problematic sections
+- **Import Empty** — include empty sections without tests
+- **Convert to Freetext** — turn problematic sections into free-text note fields
+
 #### ✅ Interactive Test Execution
 
 - **Status Tracking:** Mark each test as ✓ Pass / ✗ Fail / ⊘ Skip
 - **Bug Documentation:** Record bugs directly during testing with free-text fields
-- **Time Measurement:** Document test duration in seconds
-- **Real-time Progress:** See instantly how many tests are completed/passed/failed
+- **Bug Templates:** 3 pre-filled templates (Default / Crash+Error / Visual Bug)
+- **Time Measurement:** Optional timer per test
+- **Real-time Progress:** Total / Completed / Passed / Failed counters
+
+#### ⌨️ Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `n` | Next unfinished test |
+| `p` | Previous test |
+| `1` | Mark as Pass |
+| `2` | Mark as Fail |
+| `3` | Mark as Skip |
+| `s` | Save |
+| `/` | Focus search |
+| `Esc` | Close dialog |
+| `Ctrl+E` | Export menu |
+| `Ctrl+A` | Select all tests |
+| `Ctrl+D` | Deselect all |
+
+#### 🖱️ Quick Actions & Bulk
+
+- **Right-click context menu** per test: Copy name / Mark Pass/Fail/Skip / Start timer
+- **Bulk Actions:** Select multiple tests → Mark all as Pass/Fail/Skip
 
 #### 💾 Intelligent Auto-Save
 
-Your work is always protected:
-- **Instant:** Changes are saved immediately in the browser (localStorage)
-- **Debounced Backend:** After 500ms, changes are automatically persisted to the backend
-- **Optimistic UI:** Interface responds immediately without waiting for server responses
-- **Indicator:** Status "Saving..." → "Saved" shows the save process
+- **Instant:** Changes saved immediately in localStorage
+- **Debounced Backend:** After 500ms idle, changes persisted to SQLite
+- **Indicator:** "Saving..." → "Saved"
 
 #### 📊 Flexible Export Options
 
 | Format | Description | Ideal for |
 |--------|-------------|-----------|
-| **Markdown (.md)** | Reconstructed test plan with filled results + summary | Version control (Git) |
-| **HTML (.html)** | Self-contained report with embedded CSS, professional design | Stakeholder reports |
-| **JSON (.json)** | Structured data with all test metadata | CI/CD integration, automation |
+| **Markdown (.md)** | Reconstructed test plan with results + summary | Version control (Git) |
+| **HTML (.html)** | Self-contained report with embedded CSS | Stakeholder reports |
+| **JSON (.json)** | Structured data with all test metadata | CI/CD integration |
+
+#### 🛠️ MD Builder
+
+Create test plans from scratch without writing Markdown manually:
+
+- Drag & Drop section reordering
+- Section Wizard: choose title and type (Test Checklist / Freetext Note)
+- Live preview of generated Markdown
+- Download as `.md` or save as template
+
+#### 🗂️ Session Management
+
+- **Cloning:** Copy a session structure (without results) for regression testing
+- **Archiving:** Archive completed sessions to keep the dashboard clean
+- **Lazy Loading:** Dashboard paginates at 20 sessions per page
+- **Filters:** Filter by status, search by name
 
 #### 📋 Template System
 
@@ -77,23 +121,34 @@ Your work is always protected:
 |----------|---------|
 | **Backend API Testing** | REST API Endpoints, Authentication, CRUD Operations |
 | **Frontend UI Testing** | Components, User Flows, Responsive Design |
-| **Security Audit** | Penetration Tests, Vulnerability Scans, OWASP |
+| **Security Audit** | OWASP Top 10, Auth, Input Validation, Headers |
 | **Performance Testing** | Load Tests, Response Times, Bottlenecks |
 | **Unraid Container Testing** | Docker, Networking, Storage, WebUI |
 
+Custom templates can be saved from any session.
+
+#### 🎨 UI/UX
+
+- **Dark Mode:** Manual toggle, persisted in localStorage
+- **Accent Color:** Customizable accent color in settings
+- **Toast Notifications:** Top-right, auto-dismiss 3–5s — no browser alerts
+- **Confirm Dialogs:** Modal for destructive actions (delete, discard)
+- **Session Timeout Warning:** Notification 5 minutes before JWT expires
+- **Virtual Scrolling:** react-window for sessions with >50 tests
+
+#### 🔒 Security
+
+- JWT authentication (24h validity)
+- bcrypt password hashing (12 rounds)
+- Rate limiting: Login 5/15min, API 20/min
+- Input validation: `.md` upload only
+- Database backup download (SQLite `.db`)
+
 #### 🌍 Internationalization (i18n)
 
-Fully bilingual:
 - **German** (default)
 - **English**
-
-Language selection during first-run setup or anytime in settings. All UI elements, error messages, and validations are translated.
-
-#### 🔐 Secure Single-User System
-
-- **First-Run Setup:** Select language + create user on first access
-- **JWT Authentication:** Secure token-based authentication (24h validity)
-- **bcrypt Hashing:** Passwords hashed with bcrypt (12 rounds)
+- Language selection during first-run setup or anytime in Settings
 
 ---
 
@@ -107,6 +162,7 @@ Language selection during first-run setup or anytime in settings. All UI element
 │  React Frontend (Vite + TypeScript)          │
 │  - Zustand State Management                  │
 │  - react-i18next (de/en)                     │
+│  - react-window (Virtual Scrolling)          │
 │  - Auto-Save (localStorage + backend)        │
 └─────────────────────────────────────────────┘
                     ↕ HTTP/JSON
@@ -114,6 +170,7 @@ Language selection during first-run setup or anytime in settings. All UI element
 │             Fastify Backend                  │
 │  - API Routes (Auth, Sessions, Export)       │
 │  - JWT Middleware (@fastify/jwt)             │
+│  - Rate Limiter (Login + API)                │
 │  - i18next-http-middleware (de/en)           │
 │  - Markdown Parser (marked)                  │
 └─────────────────────────────────────────────┘
@@ -130,7 +187,7 @@ Language selection during first-run setup or anytime in settings. All UI element
 
 ### Data Flow
 
-1. **Upload:** `.md` file → Fastify → Markdown Parser → JSON structure → SQLite
+1. **Upload:** `.md` file → Import Wizard (if issues) → Markdown Parser → JSON structure → SQLite
 2. **Display:** Frontend loads session → React renders interactive UI
 3. **Execution:** User changes status/bugs → localStorage (instant) → Backend (500ms debounced) → SQLite UPSERT
 4. **Export:** User clicks Export → Backend generates MD/HTML/JSON → Download
@@ -145,6 +202,7 @@ Language selection during first-run setup or anytime in settings. All UI element
 | **better-sqlite3** | Synchronous, no network overhead, WAL for concurrency |
 | **Zustand** | Lightweight, no boilerplate, hook-based |
 | **Vite** | Faster than Webpack, native ESM, HMR |
+| **react-window** | Virtual scrolling for large test lists |
 | **react-i18next** | De-facto standard for React i18n |
 
 ---
@@ -158,7 +216,7 @@ A: No, HELDEVTEST is intentionally designed as a single-user system. For team us
 A: No, all data stays locally on your server/container. There are no external connections.
 
 **Q: Can I create custom templates?**  
-A: Yes, templates can be saved from successful sessions via the template menu.
+A: Yes, templates can be saved from any session via the template menu, or built in the MD Builder.
 
 **Q: Is HELDEVTEST mobile-friendly?**  
 A: No, intentionally desktop-only. Test execution requires a larger screen.
@@ -167,7 +225,7 @@ A: No, intentionally desktop-only. Test execution requires a larger screen.
 A: Changes → localStorage (instant) → 500ms timer starts → On new change, timer resets → After 500ms idle → Backend UPSERT.
 
 **Q: Can I query the SQLite database externally?**  
-A: Yes, the DB is located at `/app/data/heldevtest.db` in the container. You can open it with any SQLite client.
+A: Yes, the DB is located at `/app/data/heldevtest.db` in the container. You can open it with any SQLite client, or download it via Settings → Backup.
 
 ---
 
