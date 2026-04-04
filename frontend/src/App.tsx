@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from './stores/authStore';
 import { api } from './api/api';
 import { SetupPage } from './pages/SetupPage';
@@ -14,6 +15,7 @@ import { ConfirmDialog } from './components/ConfirmDialog';
 function App() {
   const [setupRequired, setSetupRequired] = useState<boolean | null>(null);
   const { token } = useAuthStore();
+  const { t } = useTranslation();
 
   useEffect(() => {
     void (async () => {
@@ -27,7 +29,7 @@ function App() {
   }, []);
 
   if (setupRequired === null) {
-    return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
+    return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{t('common:loading')}</div>;
   }
 
   if (setupRequired) {

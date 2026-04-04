@@ -78,7 +78,7 @@ select:focus {
 }
 
 .card {
-  background: white;
+  background: var(--color-bg);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--border-radius);
   padding: var(--space-lg);

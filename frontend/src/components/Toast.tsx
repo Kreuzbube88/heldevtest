@@ -27,7 +27,7 @@ export function Toast() {
           <div
             key={toast.id}
             style={{
-              background: 'white',
+              background: 'var(--color-bg)',
               padding: 'var(--space-md)',
               borderRadius: 'var(--border-radius)',
               boxShadow: 'var(--shadow-lg)',

@@ -6,10 +6,10 @@ FROM node:24-alpine AS backend-builder
 WORKDIR /app/backend
 
 COPY backend/package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 
 COPY backend/ ./
-RUN npm run build
+RUN npm run build && npm prune --production
 
 # Stage 2: Build frontend
 FROM node:24-alpine AS frontend-builder
