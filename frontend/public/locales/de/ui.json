@@ -76,7 +76,34 @@
     "next": "Weiter",
     "notStarted": "Nicht gestartet",
     "bugsPlaceholder": "Beschreibe den Fehler...",
-    "noTests": "Keine Tests in diesem Abschnitt"
+    "noTests": "Keine Tests in diesem Abschnitt",
+    "freetextPlaceholder": "Notizen hier eingeben..."
+  },
+  "wizard": {
+    "title": "Import-Assistent",
+    "subtitle": "{{count}} Abschnitt(e) haben Probleme",
+    "resolved": "gelöst",
+    "sections": "Abschnitte mit Problemen",
+    "chooseResolution": "Wie soll dieser Abschnitt behandelt werden?",
+    "selectProblem": "Abschnitt aus der Liste auswählen",
+    "applyToSimilar": "Auf ähnliche anwenden",
+    "ignoreAll": "Alle ignorieren & importieren",
+    "applyAndImport": "Anwenden & importieren",
+    "problem": {
+      "empty_section": "Leerer Abschnitt (keine Tests gefunden)",
+      "empty_subsection": "Leerer Unterabschnitt (keine Tests gefunden)",
+      "no_tests": "Keine Tests in diesem Abschnitt"
+    },
+    "resolution": {
+      "skip": "Überspringen",
+      "import_empty": "Als leeren Test-Abschnitt importieren",
+      "convert_freetext": "In Freitext-Notiz umwandeln"
+    },
+    "resolutionDesc": {
+      "skip": "Dieser Abschnitt wird nicht importiert",
+      "import_empty": "Mit leerer Test-Liste importieren — Tests können später hinzugefügt werden",
+      "convert_freetext": "Als freies Textfeld für Notizen importieren"
+    }
   },
   "templates": {
     "title": "Vorlagen",
@@ -115,12 +142,41 @@
     "creatorBio": "Open-Source Entwickler mit Fokus auf praktische Tools für Entwickler und QA-Teams.",
     "links": "Nützliche Links"
   },
+  "builder": {
+    "title": "Test Builder",
+    "create": "Test erstellen",
+    "testNamePlaceholder": "Mein neuer Test...",
+    "sections": "Sections",
+    "addSection": "Section hinzufügen",
+    "sectionTitle": "Section Titel",
+    "typeTests": "Tests",
+    "typeFreetext": "Freitext",
+    "tests": "Tests",
+    "addTest": "Test hinzufügen",
+    "newTestPlaceholder": "Neuer Test...",
+    "content": "Inhalt",
+    "contentPlaceholder": "Markdown oder Notizen eingeben...",
+    "download": "Download .md",
+    "saveTemplate": "Als Template speichern",
+    "preview": "Vorschau",
+    "deleteSection": "Löschen",
+    "confirmDeleteTitle": "Section löschen",
+    "confirmDeleteMsg": "Section wirklich löschen?",
+    "saveDialogTitle": "Template speichern",
+    "saveDialogNameLabel": "Template Name",
+    "saveDialogNamePlaceholder": "Template Name eingeben...",
+    "saveDialogDescLabel": "Beschreibung (optional)",
+    "saveDialogDescPlaceholder": "Kurze Beschreibung...",
+    "saveDialogConfirm": "Speichern"
+  },
   "toast": {
     "uploadSuccess": "Test erfolgreich hochgeladen",
+    "importSuccess": "Import erfolgreich",
     "uploadError": "Fehler beim Hochladen",
     "deleteSuccess": "Erfolgreich gelöscht",
     "saveSuccess": "Erfolgreich gespeichert",
     "exportSuccess": "Export erfolgreich",
+    "templateCreated": "Template erfolgreich erstellt",
     "error": "Ein Fehler ist aufgetreten"
   }
 }

@@ -1,3 +1,5 @@
+import type { UploadResponse, Resolution } from '../types';
+
 const API_BASE = '/api';
 
 function getToken(): string | null {
@@ -68,7 +70,7 @@ export const api = {
   },
 
   // Sessions
-  async uploadTest(file: File) {
+  async uploadTest(file: File): Promise<UploadResponse> {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -79,7 +81,25 @@ export const api = {
       body: formData
     });
     if (!res.ok) throw new Error(await res.text());
-    return res.json();
+    return res.json() as Promise<UploadResponse>;
+  },
+
+  async applyImportResolutions(sessionId: number, resolutions: Record<string, Resolution>): Promise<void> {
+    const res = await fetch(`${API_BASE}/sessions/${sessionId}/resolve-problems`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ resolutions })
+    });
+    if (!res.ok) throw new Error(await res.text());
+  },
+
+  async updateSectionContent(sessionId: number, sectionId: string, content: string): Promise<void> {
+    const res = await fetch(`${API_BASE}/sessions/${sessionId}/sections/${sectionId}/content`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ content })
+    });
+    if (!res.ok) throw new Error(await res.text());
   },
 
   async getSessions() {
@@ -134,11 +154,11 @@ export const api = {
     return res.json();
   },
 
-  async createTemplate(name: string, description: string, content: string) {
+  async createTemplate(data: { name: string; description: string; content: string }) {
     const res = await fetch(`${API_BASE}/templates`, {
       method: 'POST',
       headers: getAuthHeaders(),
-      body: JSON.stringify({ name, description, content })
+      body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error(await res.text());
     return res.json();

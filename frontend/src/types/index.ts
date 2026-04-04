@@ -51,7 +51,29 @@ export interface ParsedTestPlan {
 export interface TestSection {
   id: string;
   title: string;
+  type: 'tests' | 'freetext';
+  content?: string;
   subsections: TestSubsection[];
+}
+
+export interface Problem {
+  id: string;
+  type: 'empty_section' | 'empty_subsection' | 'no_tests';
+  severity: 'warning' | 'info';
+  location: {
+    section: string;
+    sectionIndex: number;
+    subsection?: string;
+  };
+  suggestion: string;
+}
+
+export type Resolution = 'skip' | 'import_empty' | 'convert_freetext';
+
+export interface UploadResponse {
+  success: boolean;
+  sessionId?: number;
+  problems?: Problem[];
 }
 
 export interface TestSubsection {
@@ -74,4 +96,17 @@ export interface Toast {
   id: string;
   type: 'success' | 'error' | 'info' | 'warning';
   message: string;
+}
+
+export interface BuilderTest {
+  id: string;
+  name: string;
+}
+
+export interface BuilderSection {
+  id: string;
+  title: string;
+  type: 'tests' | 'freetext';
+  tests?: BuilderTest[];
+  content?: string;
 }

@@ -11,6 +11,7 @@ import { SessionPage } from './pages/SessionPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { TemplatesPage } from './pages/TemplatesPage';
 import { AboutPage } from './pages/AboutPage';
+import { BuilderPage } from './pages/BuilderPage';
 import { Toast } from './components/Toast';
 import { ConfirmDialog } from './components/ConfirmDialog';
 
@@ -73,6 +74,7 @@ function App() {
         <Route path="/templates" element={<TemplatesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/builder" element={<BuilderPage />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Toast />

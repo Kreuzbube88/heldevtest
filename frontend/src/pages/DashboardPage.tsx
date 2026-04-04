@@ -1,16 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Upload, FolderKanban } from 'lucide-react';
+import { Upload, FolderKanban, FileEdit } from 'lucide-react';
 import { Header } from '../components/Header';
 import { BackgroundLogo } from '../components/BackgroundLogo';
 import { StatsCards } from '../components/StatsCards';
 import { SessionCard } from '../components/SessionCard';
 import { SessionFilters } from '../components/SessionFilters';
+import { ImportWizard } from '../components/ImportWizard';
 import { useSessionStore } from '../stores/sessionStore';
 import { useUIStore } from '../stores/uiStore';
 import { api } from '../api/api';
-import type { TestSession } from '../types';
+import type { TestSession, Problem, Resolution } from '../types';
 
 export function DashboardPage() {
   const navigate = useNavigate();
@@ -22,6 +23,9 @@ export function DashboardPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState('updated');
+  const [showWizard, setShowWizard] = useState(false);
+  const [wizardProblems, setWizardProblems] = useState<Problem[]>([]);
+  const [pendingSessionId, setPendingSessionId] = useState<number | null>(null);
 
   const loadSessions = useCallback(async () => {
     try {
@@ -76,14 +80,47 @@ export function DashboardPage() {
     if (!file) return;
 
     try {
-      const session = await api.uploadTest(file) as { id: number };
-      addToast('success', t('ui:toast.uploadSuccess'));
-      navigate(`/session/${session.id}`);
+      const response = await api.uploadTest(file);
+      if (response.problems && response.problems.length > 0 && response.sessionId) {
+        setWizardProblems(response.problems);
+        setPendingSessionId(response.sessionId);
+        setShowWizard(true);
+      } else if (response.sessionId) {
+        addToast('success', t('ui:toast.uploadSuccess'));
+        navigate(`/session/${response.sessionId}`);
+      }
     } catch {
       addToast('error', t('ui:toast.uploadError'));
     }
 
     e.target.value = '';
+  };
+
+  const handleWizardResolve = async (resolutions: Record<string, Resolution>) => {
+    if (!pendingSessionId) return;
+    // Convert problem-id keyed resolutions to sectionIndex keyed
+    const sectionResolutions: Record<string, Resolution> = {};
+    for (const problem of wizardProblems) {
+      const res = resolutions[problem.id];
+      if (res) sectionResolutions[String(problem.location.sectionIndex)] = res;
+    }
+    try {
+      await api.applyImportResolutions(pendingSessionId, sectionResolutions);
+      setShowWizard(false);
+      addToast('success', t('ui:toast.importSuccess'));
+      navigate(`/session/${pendingSessionId}`);
+    } catch {
+      addToast('error', t('ui:toast.error'));
+    }
+  };
+
+  const handleWizardCancel = async () => {
+    if (pendingSessionId) {
+      try { await api.deleteSession(pendingSessionId); } catch { /* ignore */ }
+    }
+    setShowWizard(false);
+    setPendingSessionId(null);
+    setWizardProblems([]);
   };
 
   const handleDelete = (id: number) => {
@@ -111,6 +148,13 @@ export function DashboardPage() {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh' }}>
+      {showWizard && (
+        <ImportWizard
+          problems={wizardProblems}
+          onResolve={(res) => { void handleWizardResolve(res); }}
+          onCancel={() => { void handleWizardCancel(); }}
+        />
+      )}
       <BackgroundLogo />
       <Header />
 
@@ -133,6 +177,15 @@ export function DashboardPage() {
           </div>
 
           <div style={{ display: 'flex', gap: 'var(--space-md)' }}>
+            <button
+              onClick={() => navigate('/builder')}
+              className="btn-secondary"
+              style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}
+            >
+              <FileEdit size={20} />
+              {t('ui:builder.create')}
+            </button>
+
             <button
               onClick={() => navigate('/templates')}
               className="btn-secondary"

@@ -76,7 +76,34 @@
     "next": "Next",
     "notStarted": "Not Started",
     "bugsPlaceholder": "Describe the bug...",
-    "noTests": "No tests in this section"
+    "noTests": "No tests in this section",
+    "freetextPlaceholder": "Enter your notes here..."
+  },
+  "wizard": {
+    "title": "Import Wizard",
+    "subtitle": "{{count}} section(s) have issues",
+    "resolved": "resolved",
+    "sections": "Sections with Issues",
+    "chooseResolution": "How should this section be handled?",
+    "selectProblem": "Select a section from the list",
+    "applyToSimilar": "Apply to Similar",
+    "ignoreAll": "Ignore All & Import",
+    "applyAndImport": "Apply & Import",
+    "problem": {
+      "empty_section": "Empty section (no tests found)",
+      "empty_subsection": "Empty subsection (no tests found)",
+      "no_tests": "No tests in this section"
+    },
+    "resolution": {
+      "skip": "Skip",
+      "import_empty": "Import as empty test section",
+      "convert_freetext": "Convert to freetext note"
+    },
+    "resolutionDesc": {
+      "skip": "This section will not be imported",
+      "import_empty": "Import with empty test list — you can add tests later",
+      "convert_freetext": "Import as a free-form text area for notes"
+    }
   },
   "templates": {
     "title": "Templates",
@@ -115,12 +142,41 @@
     "creatorBio": "Open-source developer focused on practical tools for developers and QA teams.",
     "links": "Useful Links"
   },
+  "builder": {
+    "title": "Test Builder",
+    "create": "Create Test",
+    "testNamePlaceholder": "My new test...",
+    "sections": "Sections",
+    "addSection": "Add Section",
+    "sectionTitle": "Section Title",
+    "typeTests": "Tests",
+    "typeFreetext": "Freetext",
+    "tests": "Tests",
+    "addTest": "Add Test",
+    "newTestPlaceholder": "New test...",
+    "content": "Content",
+    "contentPlaceholder": "Enter markdown or notes...",
+    "download": "Download .md",
+    "saveTemplate": "Save as Template",
+    "preview": "Preview",
+    "deleteSection": "Delete",
+    "confirmDeleteTitle": "Delete Section",
+    "confirmDeleteMsg": "Really delete this section?",
+    "saveDialogTitle": "Save Template",
+    "saveDialogNameLabel": "Template Name",
+    "saveDialogNamePlaceholder": "Enter template name...",
+    "saveDialogDescLabel": "Description (optional)",
+    "saveDialogDescPlaceholder": "Short description...",
+    "saveDialogConfirm": "Save"
+  },
   "toast": {
     "uploadSuccess": "Test uploaded successfully",
+    "importSuccess": "Import successful",
     "uploadError": "Upload failed",
     "deleteSuccess": "Deleted successfully",
     "saveSuccess": "Saved successfully",
     "exportSuccess": "Export successful",
+    "templateCreated": "Template created successfully",
     "error": "An error occurred"
   }
 }
