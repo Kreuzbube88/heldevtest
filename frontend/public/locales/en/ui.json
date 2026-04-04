@@ -43,7 +43,15 @@
     "exportJSON": "Export as JSON",
     "saving": "Saving...",
     "saved": "Saved",
-    "autoSaveEnabled": "Auto-save enabled"
+    "autoSaveEnabled": "Auto-save enabled",
+    "sections": "Sections",
+    "sessionStats": "Session Stats",
+    "exportTitle": "Export",
+    "previous": "Previous",
+    "next": "Next",
+    "notStarted": "Not Started",
+    "bugsPlaceholder": "Describe the bug...",
+    "noTests": "No tests in this section"
   },
   "templates": {
     "title": "Templates",

@@ -85,8 +85,16 @@ export function DashboardPage() {
           </div>
         ) : (
           <div style={{ display: 'grid', gap: 'var(--space-md)' }}>
-            {sessions.map(session => (
-              <div key={session.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {sessions.map(session => {
+              const borderColor = session.failed_tests > 0
+                ? 'var(--color-error)'
+                : session.passed_tests === session.total_tests && session.total_tests > 0
+                  ? 'var(--color-success)'
+                  : session.passed_tests > 0
+                    ? 'var(--color-warning)'
+                    : 'var(--color-info)';
+              return (
+              <div key={session.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderLeft: `4px solid ${borderColor}` }}>
                 <div style={{ flex: 1, cursor: 'pointer' }} onClick={() => navigate(`/session/${session.id}`)}>
                   <h3>{session.name}</h3>
                   <div style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)', marginTop: 'var(--space-xs)' }}>
@@ -98,7 +106,8 @@ export function DashboardPage() {
                   <Trash2 size={20} />
                 </button>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

@@ -43,7 +43,15 @@
     "exportJSON": "Als JSON exportieren",
     "saving": "Speichert...",
     "saved": "Gespeichert",
-    "autoSaveEnabled": "Auto-Speicherung aktiv"
+    "autoSaveEnabled": "Auto-Speicherung aktiv",
+    "sections": "Abschnitte",
+    "sessionStats": "Sitzungs-Statistik",
+    "exportTitle": "Export",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "notStarted": "Nicht gestartet",
+    "bugsPlaceholder": "Beschreibe den Fehler...",
+    "noTests": "Keine Tests in diesem Abschnitt"
   },
   "templates": {
     "title": "Vorlagen",

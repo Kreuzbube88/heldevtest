@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSessionStore } from '../stores/sessionStore';
@@ -6,30 +6,58 @@ import { useUIStore } from '../stores/uiStore';
 import { api } from '../api/api';
 import { Header } from '../components/Header';
 import { BackgroundLogo } from '../components/BackgroundLogo';
-import { Download } from 'lucide-react';
+import { TestSidebar } from '../components/TestSidebar';
+import { TestItem } from '../components/TestItem';
+import { ArrowLeft, ArrowRight, Download } from 'lucide-react';
+import { getSectionStats, getOverallStats } from '../utils/sessionUtils';
 import type { TestSession, TestResult } from '../types';
 
 export function SessionPage() {
   const { id } = useParams<{ id: string }>();
   const { currentSession, currentResults, localResults, setCurrentSession, updateLocalResult } = useSessionStore();
   const { addToast, setSaving, isSaving } = useUIStore();
-  const { t } = useTranslation();
+  const { t } = useTranslation('ui');
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const localResultsRef = useRef(localResults);
   useEffect(() => { localResultsRef.current = localResults; }, [localResults]);
+
+  const [currentSectionId, setCurrentSectionId] = useState('');
 
   const loadSession = useCallback(async (sessionId: number) => {
     try {
       const data = await api.getSession(sessionId) as { session: TestSession; results: TestResult[] };
       setCurrentSession(data.session, data.results);
     } catch {
-      addToast('error', t('ui:toast.error'));
+      addToast('error', t('toast.error'));
     }
   }, [setCurrentSession, addToast, t]);
 
   useEffect(() => {
     if (id) void loadSession(Number(id));
   }, [id, loadSession]);
+
+  useEffect(() => {
+    if (currentSession && currentSectionId === '') {
+      const firstSection = currentSession.markdown_structure.sections[0];
+      if (firstSection) setCurrentSectionId(firstSection.id);
+    }
+  }, [currentSession, currentSectionId]);
+
+  const getStatus = useCallback((testPath: string): string => {
+    const local = localResults.get(testPath);
+    if (local?.status) return local.status;
+    const existing = currentResults.find(r => r.test_path === testPath);
+    return existing?.status ?? 'pending';
+  }, [localResults, currentResults]);
+
+  const getResult = (testPath: string): { status: string; bugs: string } => {
+    const local = localResults.get(testPath);
+    const existing = currentResults.find(r => r.test_path === testPath);
+    return {
+      status: local?.status ?? existing?.status ?? 'pending',
+      bugs: (local?.bugs ?? existing?.bugs ?? '') as string,
+    };
+  };
 
   const handleResultChange = (testPath: string, field: keyof TestResult, value: string | number | null) => {
     updateLocalResult(testPath, { [field]: value } as Partial<TestResult>);
@@ -53,18 +81,10 @@ export function SessionPage() {
           setSaving(false);
         } catch {
           setSaving(false);
-          addToast('error', t('ui:toast.error'));
+          addToast('error', t('toast.error'));
         }
       })();
     }, 500);
-  };
-
-  const getResultValue = (testPath: string, field: keyof TestResult): string | number | null => {
-    const local = localResults.get(testPath);
-    if (local && field in local) return local[field] as string | number | null;
-    const existing = currentResults.find(r => r.test_path === testPath);
-    if (existing) return existing[field] as string | number | null;
-    return field === 'status' ? 'pending' : '';
   };
 
   const handleExport = async (format: 'markdown' | 'html' | 'json') => {
@@ -72,9 +92,9 @@ export function SessionPage() {
       if (format === 'markdown') await api.exportMarkdown(Number(id));
       else if (format === 'html') await api.exportHTML(Number(id));
       else await api.exportJSON(Number(id));
-      addToast('success', t('ui:toast.exportSuccess'));
+      addToast('success', t('toast.exportSuccess'));
     } catch {
-      addToast('error', t('ui:toast.error'));
+      addToast('error', t('toast.error'));
     }
   };
 
@@ -88,97 +108,177 @@ export function SessionPage() {
     );
   }
 
-  const structure = currentSession.markdown_structure;
+  const sections = currentSession.markdown_structure.sections;
+  const sectionIds = sections.map(s => s.id);
+  const currentIndex = sectionIds.indexOf(currentSectionId);
+  const currentSection = sections.find(s => s.id === currentSectionId) ?? sections[0];
+  const overallStats = getOverallStats(sections, getStatus);
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) setCurrentSectionId(sectionIds[currentIndex - 1]);
+  };
+
+  const handleNext = () => {
+    if (currentIndex < sectionIds.length - 1) setCurrentSectionId(sectionIds[currentIndex + 1]);
+  };
 
   return (
-    <div>
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <BackgroundLogo />
       <Header />
-      <div className="container">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
-          <div>
-            <h1>{structure.title}</h1>
-            <div style={{ color: 'var(--color-text-secondary)', marginTop: 'var(--space-xs)', fontSize: 'var(--font-size-sm)' }}>
-              {isSaving ? t('ui:session.saving') : t('ui:session.saved')}
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
-            <button className="btn-secondary" onClick={() => { void handleExport('markdown'); }} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)' }}>
-              <Download size={16} />
-              MD
-            </button>
-            <button className="btn-secondary" onClick={() => { void handleExport('html'); }} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)' }}>
-              <Download size={16} />
-              HTML
-            </button>
-            <button className="btn-secondary" onClick={() => { void handleExport('json'); }} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)' }}>
-              <Download size={16} />
-              JSON
-            </button>
-          </div>
-        </div>
 
-        {structure.sections.map(section => (
-          <div key={section.id} style={{ marginBottom: 'var(--space-xl)' }}>
-            <h2 style={{ marginBottom: 'var(--space-md)', paddingBottom: 'var(--space-sm)', borderBottom: '2px solid var(--color-border)' }}>
-              {section.title}
-            </h2>
-            {section.subsections.map(subsection => (
-              <div key={subsection.id} style={{ marginLeft: 'var(--space-lg)', marginTop: 'var(--space-md)' }}>
-                <h3 style={{ marginBottom: 'var(--space-sm)' }}>{subsection.title}</h3>
-                {subsection.tests.map(test => (
-                  <div key={test.path} className="card" style={{ marginTop: 'var(--space-md)' }}>
-                    <h4 style={{ marginBottom: 'var(--space-md)' }}>{test.title}</h4>
+      <div style={{ flex: 1, display: 'flex', minHeight: 0 }}>
+        {/* Left: Section Sidebar */}
+        <TestSidebar
+          sections={sections}
+          getStatus={getStatus}
+          currentSectionId={currentSectionId}
+          onSectionClick={setCurrentSectionId}
+        />
 
-                    <div style={{ marginBottom: 'var(--space-md)' }}>
-                      <label style={{ display: 'block', marginBottom: 'var(--space-sm)', fontWeight: 600 }}>
-                        {t('ui:session.testStatus')}
-                      </label>
-                      <div style={{ display: 'flex', gap: 'var(--space-lg)' }}>
-                        {(['pass', 'fail', 'skip'] as const).map(status => (
-                          <label key={status} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)', cursor: 'pointer' }}>
-                            <input
-                              type="radio"
-                              name={`status-${test.path}`}
-                              checked={getResultValue(test.path, 'status') === status}
-                              onChange={() => handleResultChange(test.path, 'status', status)}
-                            />
-                            {t(`ui:session.status${status.charAt(0).toUpperCase()}${status.slice(1)}`)}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
+        {/* Center: Test Content */}
+        <main style={{ flex: 1, overflowY: 'auto', padding: 'var(--space-xl)', position: 'relative', zIndex: 1 }}>
+          {currentSection && (() => {
+            const sectionStats = getSectionStats(currentSection, getStatus);
+            return (
+              <>
+                {/* Section header */}
+                <div style={{ marginBottom: 'var(--space-xl)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-sm)' }}>
+                    <h2 style={{ margin: 0 }}>{currentSection.title}</h2>
+                    <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', paddingTop: 'var(--space-sm)' }}>
+                      {isSaving ? t('session.saving') : t('session.saved')}
+                    </span>
+                  </div>
 
-                    <div style={{ marginBottom: 'var(--space-md)' }}>
-                      <label style={{ display: 'block', marginBottom: 'var(--space-sm)', fontWeight: 600 }}>
-                        {t('ui:session.bugs')}
-                      </label>
-                      <textarea
-                        value={(getResultValue(test.path, 'bugs') as string) || ''}
-                        onChange={(e) => handleResultChange(test.path, 'bugs', e.target.value)}
-                        rows={3}
-                        style={{ width: '100%' }}
-                      />
-                    </div>
+                  <div className="progress" style={{ marginTop: 'var(--space-md)' }}>
+                    <div className="progress-bar" style={{ width: `${sectionStats.percentage}%` }} />
+                  </div>
 
-                    <div>
-                      <label style={{ display: 'block', marginBottom: 'var(--space-sm)', fontWeight: 600 }}>
-                        {t('ui:session.duration')}
-                      </label>
-                      <input
-                        type="number"
-                        value={(getResultValue(test.path, 'duration_seconds') as number) || ''}
-                        onChange={(e) => handleResultChange(test.path, 'duration_seconds', e.target.value ? Number(e.target.value) : null)}
-                        style={{ width: '200px' }}
-                        min={0}
-                      />
-                    </div>
+                  <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)', flexWrap: 'wrap' }}>
+                    <span className="badge badge-success">{sectionStats.passed} {t('session.statusPass')}</span>
+                    <span className="badge badge-error">{sectionStats.failed} {t('session.statusFail')}</span>
+                    <span className="badge badge-warning">{sectionStats.skipped} {t('session.statusSkip')}</span>
+                    <span className="badge badge-info">{sectionStats.notStarted} {t('session.notStarted')}</span>
+                  </div>
+                </div>
+
+                {/* Tests grouped by subsection */}
+                {currentSection.subsections.map(sub => (
+                  <div key={sub.id} style={{ marginBottom: 'var(--space-xl)' }}>
+                    {currentSection.subsections.length > 1 && (
+                      <h3 style={{ marginBottom: 'var(--space-md)', paddingBottom: 'var(--space-sm)', borderBottom: '1px solid var(--color-border)' }}>
+                        {sub.title}
+                      </h3>
+                    )}
+                    {sub.tests.length === 0 ? (
+                      <p style={{ color: 'var(--color-text-tertiary)', fontSize: 'var(--text-sm)' }}>
+                        {t('session.noTests')}
+                      </p>
+                    ) : (
+                      sub.tests.map(test => (
+                        <TestItem
+                          key={test.path}
+                          test={test}
+                          result={getResult(test.path)}
+                          onStatusChange={(status) => handleResultChange(test.path, 'status', status)}
+                          onBugsChange={(bugs) => handleResultChange(test.path, 'bugs', bugs)}
+                        />
+                      ))
+                    )}
                   </div>
                 ))}
+
+                {/* Prev / Next navigation */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'var(--space-xl)', paddingTop: 'var(--space-lg)', borderTop: '1px solid var(--color-border)' }}>
+                  <button
+                    onClick={handlePrevious}
+                    className="btn-secondary"
+                    disabled={currentIndex <= 0}
+                    style={{ opacity: currentIndex <= 0 ? 0.4 : 1 }}
+                  >
+                    <ArrowLeft size={18} />
+                    {t('session.previous')}
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    className="btn-primary"
+                    disabled={currentIndex >= sectionIds.length - 1}
+                    style={{ opacity: currentIndex >= sectionIds.length - 1 ? 0.4 : 1 }}
+                  >
+                    {t('session.next')}
+                    <ArrowRight size={18} />
+                  </button>
+                </div>
+              </>
+            );
+          })()}
+        </main>
+
+        {/* Right: Stats + Export */}
+        <aside style={{
+          width: '220px',
+          flexShrink: 0,
+          borderLeft: '1px solid var(--color-border)',
+          padding: 'var(--space-lg)',
+          overflowY: 'auto',
+          background: 'var(--color-bg-secondary)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--space-lg)',
+        }}>
+          <div>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--space-md)' }}>
+              {t('session.sessionStats')}
+            </h3>
+
+            <div className="progress" style={{ marginBottom: 'var(--space-sm)' }}>
+              <div className="progress-bar" style={{ width: `${overallStats.percentage}%` }} />
+            </div>
+            <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-md)', textAlign: 'center' }}>
+              {overallStats.percentage}% — {overallStats.total - overallStats.notStarted}/{overallStats.total}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xs)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-sm)' }}>
+                <span className="badge badge-success" style={{ fontSize: 'var(--text-xs)' }}>{t('session.statusPass')}</span>
+                <span style={{ fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-success)' }}>{overallStats.passed}</span>
               </div>
-            ))}
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-sm)' }}>
+                <span className="badge badge-error" style={{ fontSize: 'var(--text-xs)' }}>{t('session.statusFail')}</span>
+                <span style={{ fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-error)' }}>{overallStats.failed}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-sm)' }}>
+                <span className="badge badge-warning" style={{ fontSize: 'var(--text-xs)' }}>{t('session.statusSkip')}</span>
+                <span style={{ fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-warning)' }}>{overallStats.skipped}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-sm)' }}>
+                <span className="badge badge-info" style={{ fontSize: 'var(--text-xs)' }}>{t('session.notStarted')}</span>
+                <span style={{ fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-info)' }}>{overallStats.notStarted}</span>
+              </div>
+            </div>
           </div>
-        ))}
+
+          <div>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--space-md)' }}>
+              {t('session.exportTitle')}
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+              <button className="btn-secondary" onClick={() => { void handleExport('markdown'); }} style={{ justifyContent: 'flex-start', padding: 'var(--space-sm) var(--space-md)' }}>
+                <Download size={14} />
+                MD
+              </button>
+              <button className="btn-secondary" onClick={() => { void handleExport('html'); }} style={{ justifyContent: 'flex-start', padding: 'var(--space-sm) var(--space-md)' }}>
+                <Download size={14} />
+                HTML
+              </button>
+              <button className="btn-secondary" onClick={() => { void handleExport('json'); }} style={{ justifyContent: 'flex-start', padding: 'var(--space-sm) var(--space-md)' }}>
+                <Download size={14} />
+                JSON
+              </button>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   );
