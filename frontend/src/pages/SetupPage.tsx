@@ -18,7 +18,6 @@ export function SetupPage() {
   const { addToast } = useUIStore();
 
   const handleLanguageNext = () => {
-    void i18n.changeLanguage(language);
     setStep(2);
   };
 
@@ -96,7 +95,13 @@ export function SetupPage() {
         {step === 1 ? (
           <div className="animate-slideUp">
             <label>{t('ui:setup.selectLanguage')}</label>
-            <LanguageSelector value={language} onChange={setLanguage} />
+            <LanguageSelector
+              value={language}
+              onChange={(lang) => {
+                setLanguage(lang);
+                void i18n.changeLanguage(lang);
+              }}
+            />
             <button
               className="btn-primary"
               onClick={handleLanguageNext}
