@@ -138,37 +138,47 @@ export function ImportWizard({ problems, onResolve, onCancel }: Props) {
                   {t('wizard.chooseResolution')}
                 </p>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
-                  {(['skip', 'import_empty', 'convert_freetext'] as Resolution[]).map(res => (
-                    <label
-                      key={res}
-                      style={{
-                        display: 'flex', alignItems: 'flex-start', gap: 'var(--space-md)',
-                        padding: 'var(--space-md)',
-                        border: `2px solid ${resolutions[selectedProblem.id] === res ? 'var(--color-primary-solid)' : 'var(--color-border)'}`,
-                        borderRadius: 'var(--radius-md)',
-                        cursor: 'pointer',
-                        background: resolutions[selectedProblem.id] === res ? 'var(--color-bg-tertiary)' : 'transparent'
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name={`resolution-${selectedProblem.id}`}
-                        value={res}
-                        checked={resolutions[selectedProblem.id] === res}
-                        onChange={() => setResolution(selectedProblem.id, res)}
-                        style={{ marginTop: '2px' }}
-                      />
-                      <div>
-                        <div style={{ fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--text-sm)' }}>
-                          {t(`wizard.resolution.${res}`)}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
+                  {(['skip', 'import_empty', 'convert_freetext'] as Resolution[]).map(res => {
+                    const isSelected = resolutions[selectedProblem.id] === res;
+                    const colorMap: Record<Resolution, { border: string; bg: string }> = {
+                      skip: { border: 'var(--color-error)', bg: 'rgba(239, 68, 68, 0.05)' },
+                      import_empty: { border: 'var(--color-primary-solid)', bg: 'rgba(102, 126, 234, 0.05)' },
+                      convert_freetext: { border: 'var(--color-success)', bg: 'rgba(16, 185, 129, 0.05)' }
+                    };
+                    const { border, bg } = colorMap[res];
+                    return (
+                      <label
+                        key={res}
+                        style={{
+                          display: 'flex', alignItems: 'flex-start', gap: 'var(--space-md)',
+                          padding: 'var(--space-lg)',
+                          border: `3px solid ${isSelected ? border : 'var(--color-border)'}`,
+                          borderRadius: 'var(--radius-lg)',
+                          cursor: 'pointer',
+                          background: isSelected ? bg : 'transparent',
+                          transition: 'all var(--transition-fast)'
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name={`resolution-${selectedProblem.id}`}
+                          value={res}
+                          checked={isSelected}
+                          onChange={() => setResolution(selectedProblem.id, res)}
+                          style={{ width: '20px', height: '20px', marginTop: '2px', cursor: 'pointer', accentColor: border }}
+                        />
+                        <div>
+                          <div style={{ fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--text-lg)' }}>
+                            {t(`wizard.resolution.${res}`)}
+                          </div>
+                          <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-tertiary)', marginTop: '4px' }}>
+                            {t(`wizard.resolutionDesc.${res}`)}
+                          </div>
                         </div>
-                        <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
-                          {t(`wizard.resolutionDesc.${res}`)}
-                        </div>
-                      </div>
-                    </label>
-                  ))}
+                      </label>
+                    );
+                  })}
                 </div>
 
                 {problems.filter(p => p.type === selectedProblem.type).length > 1 && resolutions[selectedProblem.id] && (
