@@ -1,0 +1,70 @@
+{
+  "setup": {
+    "title": "HELDEVTEST Einrichtung",
+    "selectLanguage": "Sprache auswählen",
+    "createAccount": "Konto erstellen",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "nextStep": "Weiter",
+    "previousStep": "Zurück",
+    "finish": "Fertigstellen",
+    "passwordMismatch": "Passwörter stimmen nicht überein"
+  },
+  "login": {
+    "title": "Anmelden",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "loginButton": "Anmelden",
+    "errorInvalid": "Ungültige Anmeldedaten"
+  },
+  "dashboard": {
+    "title": "Test-Sitzungen",
+    "uploadTest": "Test hochladen",
+    "newFromTemplate": "Aus Vorlage erstellen",
+    "noSessions": "Keine Test-Sitzungen vorhanden",
+    "sessionStatus": "Status",
+    "sessionProgress": "Fortschritt",
+    "deleteSession": "Sitzung löschen",
+    "deleteConfirm": "Sitzung wirklich löschen?"
+  },
+  "session": {
+    "title": "Test-Sitzung",
+    "testStatus": "Status",
+    "bugs": "Fehler/Probleme",
+    "duration": "Dauer (Sekunden)",
+    "statusPending": "Ausstehend",
+    "statusPass": "Bestanden",
+    "statusFail": "Fehlgeschlagen",
+    "statusSkip": "Übersprungen",
+    "exportMarkdown": "Als Markdown exportieren",
+    "exportHTML": "Als HTML exportieren",
+    "exportJSON": "Als JSON exportieren",
+    "saving": "Speichert...",
+    "saved": "Gespeichert",
+    "autoSaveEnabled": "Auto-Speicherung aktiv"
+  },
+  "templates": {
+    "title": "Vorlagen",
+    "noTemplates": "Keine Vorlagen vorhanden",
+    "createTemplate": "Vorlage erstellen",
+    "deleteTemplate": "Vorlage löschen",
+    "deleteConfirm": "Vorlage wirklich löschen?",
+    "useTemplate": "Vorlage verwenden"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "languageChanged": "Sprache geändert",
+    "account": "Konto",
+    "logoutConfirm": "Wirklich abmelden?"
+  },
+  "toast": {
+    "uploadSuccess": "Test erfolgreich hochgeladen",
+    "uploadError": "Fehler beim Hochladen",
+    "deleteSuccess": "Erfolgreich gelöscht",
+    "saveSuccess": "Erfolgreich gespeichert",
+    "exportSuccess": "Export erfolgreich",
+    "error": "Ein Fehler ist aufgetreten"
+  }
+}

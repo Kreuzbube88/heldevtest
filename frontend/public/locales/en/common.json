@@ -1,0 +1,13 @@
+{
+  "appName": "HELDEVTEST",
+  "welcome": "Welcome",
+  "loading": "Loading...",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "confirm": "Confirm",
+  "close": "Close",
+  "export": "Export",
+  "logout": "Logout",
+  "settings": "Settings"
+}

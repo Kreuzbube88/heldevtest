@@ -1,0 +1,70 @@
+{
+  "setup": {
+    "title": "HELDEVTEST Setup",
+    "selectLanguage": "Select Language",
+    "createAccount": "Create Account",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "nextStep": "Next",
+    "previousStep": "Back",
+    "finish": "Finish",
+    "passwordMismatch": "Passwords do not match"
+  },
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "loginButton": "Login",
+    "errorInvalid": "Invalid credentials"
+  },
+  "dashboard": {
+    "title": "Test Sessions",
+    "uploadTest": "Upload Test",
+    "newFromTemplate": "Create from Template",
+    "noSessions": "No test sessions available",
+    "sessionStatus": "Status",
+    "sessionProgress": "Progress",
+    "deleteSession": "Delete Session",
+    "deleteConfirm": "Really delete session?"
+  },
+  "session": {
+    "title": "Test Session",
+    "testStatus": "Status",
+    "bugs": "Bugs/Issues",
+    "duration": "Duration (seconds)",
+    "statusPending": "Pending",
+    "statusPass": "Pass",
+    "statusFail": "Fail",
+    "statusSkip": "Skip",
+    "exportMarkdown": "Export as Markdown",
+    "exportHTML": "Export as HTML",
+    "exportJSON": "Export as JSON",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "autoSaveEnabled": "Auto-save enabled"
+  },
+  "templates": {
+    "title": "Templates",
+    "noTemplates": "No templates available",
+    "createTemplate": "Create Template",
+    "deleteTemplate": "Delete Template",
+    "deleteConfirm": "Really delete template?",
+    "useTemplate": "Use Template"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "languageChanged": "Language changed",
+    "account": "Account",
+    "logoutConfirm": "Really logout?"
+  },
+  "toast": {
+    "uploadSuccess": "Test uploaded successfully",
+    "uploadError": "Upload failed",
+    "deleteSuccess": "Deleted successfully",
+    "saveSuccess": "Saved successfully",
+    "exportSuccess": "Export successful",
+    "error": "An error occurred"
+  }
+}
