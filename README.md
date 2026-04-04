@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="frontend/public/logo.png" alt="HELDEVTEST Logo" width="180"/>
+<img src="frontend/public/logo.png" alt="HELDEVTEST Logo" width="360"/>
 
 # HELDEVTEST
 
@@ -191,6 +191,12 @@ cd frontend && npm install && npm run dev  # http://localhost:3000
 ## 📝 License
 
 MIT — [Kreuzbube88](https://github.com/Kreuzbube88)
+
+---
+
+> **Hinweis:** Dieses gesamte Projekt wurde mit Unterstützung von Claude Code entwickelt und erstellt. Es ist nicht für die öffentliche Verbreitung oder Veröffentlichung im Internet vorgesehen.
+>
+> **Note:** This entire project was developed and created with the support of Claude Code. It is not intended for public distribution or publication on the internet.
 
 <div align="center">
 
