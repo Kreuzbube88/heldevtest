@@ -5,6 +5,9 @@ FROM node:24-alpine AS backend-builder
 
 WORKDIR /app/backend
 
+# Install build dependencies for better-sqlite3
+RUN apk add --no-cache python3 make g++
+
 COPY backend/package*.json ./
 RUN npm ci
 
@@ -27,8 +30,8 @@ FROM node:24-alpine
 
 WORKDIR /app
 
-# Install better-sqlite3 runtime dependencies
-RUN apk add --no-cache python3 make g++
+# Install libstdc++ for better-sqlite3 native addon
+RUN apk add --no-cache libstdc++
 
 # Copy backend production dependencies and build
 COPY --from=backend-builder /app/backend/node_modules ./backend/node_modules
