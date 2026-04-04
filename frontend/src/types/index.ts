@@ -104,6 +104,12 @@ export interface BuilderTest {
   name: string;
 }
 
+export interface BugTemplate {
+  id: string;
+  name: string;
+  template: string;
+}
+
 export interface BuilderSection {
   id: string;
   title: string;

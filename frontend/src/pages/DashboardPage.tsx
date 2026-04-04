@@ -3,16 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Upload, FolderKanban, FileEdit, Archive } from 'lucide-react';
 
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-
-  return debouncedValue;
-}
+import { useDebounce } from '../hooks/useDebounce';
 import { Header } from '../components/Header';
 import { BackgroundLogo } from '../components/BackgroundLogo';
 import { StatsCards } from '../components/StatsCards';
