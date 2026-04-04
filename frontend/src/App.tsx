@@ -14,20 +14,29 @@ import { ConfirmDialog } from './components/ConfirmDialog';
 
 function App() {
   const [setupRequired, setSetupRequired] = useState<boolean | null>(null);
-  const { token, initializeAuth } = useAuthStore();
+  const { token, user, initializeAuth } = useAuthStore();
   const { t } = useTranslation();
+
+  const checkSetup = async () => {
+    try {
+      const data = await api.checkSetupStatus() as { setupRequired: boolean };
+      setSetupRequired(data.setupRequired);
+    } catch {
+      setSetupRequired(false);
+    }
+  };
 
   useEffect(() => {
     initializeAuth();
-    void (async () => {
-      try {
-        const data = await api.checkSetupStatus() as { setupRequired: boolean };
-        setSetupRequired(data.setupRequired);
-      } catch {
-        setSetupRequired(false);
-      }
-    })();
+    void checkSetup();
   }, [initializeAuth]);
+
+  // Re-check setup when token changes (after successful setup/login)
+  useEffect(() => {
+    if (token) {
+      void checkSetup();
+    }
+  }, [token]);
 
   if (setupRequired === null) {
     return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{t('common:loading')}</div>;
@@ -43,7 +52,7 @@ function App() {
     );
   }
 
-  if (!token) {
+  if (!token || !user) {
     return (
       <BrowserRouter>
         <LoginPage />

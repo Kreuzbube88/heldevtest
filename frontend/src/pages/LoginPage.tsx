@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../stores/authStore';
 import { useUIStore } from '../stores/uiStore';
@@ -11,7 +10,6 @@ export function LoginPage() {
   const { t, i18n } = useTranslation();
   const { setAuth } = useAuthStore();
   const { addToast } = useUIStore();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +18,7 @@ export function LoginPage() {
       const res = await api.login(username, password) as { user: { language: string }; token: string };
       setAuth(res.user as Parameters<typeof setAuth>[0], res.token);
       void i18n.changeLanguage((res.user as { language: string }).language);
-      navigate('/');
+      window.location.href = '/';
     } catch {
       addToast('error', t('ui:login.errorInvalid'));
     }
