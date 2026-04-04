@@ -1,7 +1,11 @@
 const API_BASE = '/api';
 
+function getToken(): string | null {
+  return localStorage.getItem('token') || sessionStorage.getItem('token');
+}
+
 function getAuthHeaders(): HeadersInit {
-  const token = localStorage.getItem('token');
+  const token = getToken();
   return {
     'Content-Type': 'application/json',
     ...(token && { Authorization: `Bearer ${token}` })
@@ -68,7 +72,7 @@ export const api = {
     const formData = new FormData();
     formData.append('file', file);
 
-    const token = localStorage.getItem('token');
+    const token = getToken();
     const res = await fetch(`${API_BASE}/sessions/upload`, {
       method: 'POST',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -151,7 +155,7 @@ export const api = {
 
   // Export
   async exportMarkdown(sessionId: number) {
-    const token = localStorage.getItem('token');
+    const token = getToken();
     const res = await fetch(`${API_BASE}/export/${sessionId}/markdown`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
@@ -166,7 +170,7 @@ export const api = {
   },
 
   async exportHTML(sessionId: number) {
-    const token = localStorage.getItem('token');
+    const token = getToken();
     const res = await fetch(`${API_BASE}/export/${sessionId}/html`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
@@ -181,7 +185,7 @@ export const api = {
   },
 
   async exportJSON(sessionId: number) {
-    const token = localStorage.getItem('token');
+    const token = getToken();
     const res = await fetch(`${API_BASE}/export/${sessionId}/json`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
