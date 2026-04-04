@@ -217,7 +217,15 @@
     "saveDialogNamePlaceholder": "Enter template name...",
     "saveDialogDescLabel": "Description (optional)",
     "saveDialogDescPlaceholder": "Short description...",
-    "saveDialogConfirm": "Save"
+    "saveDialogConfirm": "Save",
+    "createSection": "Create Section",
+    "sectionTitleRequired": "Section title required",
+    "sectionTitlePlaceholder": "e.g. Login Tests",
+    "sectionType": "Section Type",
+    "typeTestsDescription": "Section with test checklist",
+    "typeFreetextDescription": "Section with freetext/notes",
+    "moveUp": "Move up",
+    "moveDown": "Move down"
   },
   "toast": {
     "uploadSuccess": "Test uploaded successfully",

@@ -217,7 +217,15 @@
     "saveDialogNamePlaceholder": "Template Name eingeben...",
     "saveDialogDescLabel": "Beschreibung (optional)",
     "saveDialogDescPlaceholder": "Kurze Beschreibung...",
-    "saveDialogConfirm": "Speichern"
+    "saveDialogConfirm": "Speichern",
+    "createSection": "Section erstellen",
+    "sectionTitleRequired": "Section-Titel erforderlich",
+    "sectionTitlePlaceholder": "z.B. Login Tests",
+    "sectionType": "Section-Typ",
+    "typeTestsDescription": "Section mit Test-Checkliste",
+    "typeFreetextDescription": "Section mit Freitext/Notizen",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten"
   },
   "toast": {
     "uploadSuccess": "Test erfolgreich hochgeladen",

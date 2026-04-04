@@ -138,37 +138,38 @@ export function ImportWizard({ problems, onResolve, onCancel }: Props) {
                   {t('wizard.chooseResolution')}
                 </p>
 
-                {(['skip', 'import_empty', 'convert_freetext'] as Resolution[]).map(res => (
-                  <label
-                    key={res}
-                    style={{
-                      display: 'flex', alignItems: 'flex-start', gap: 'var(--space-md)',
-                      padding: 'var(--space-md)',
-                      border: `2px solid ${resolutions[selectedProblem.id] === res ? 'var(--color-primary-solid)' : 'var(--color-border)'}`,
-                      borderRadius: 'var(--radius-md)',
-                      marginBottom: 'var(--space-sm)',
-                      cursor: 'pointer',
-                      background: resolutions[selectedProblem.id] === res ? 'var(--color-bg-tertiary)' : 'transparent'
-                    }}
-                  >
-                    <input
-                      type="radio"
-                      name={`resolution-${selectedProblem.id}`}
-                      value={res}
-                      checked={resolutions[selectedProblem.id] === res}
-                      onChange={() => setResolution(selectedProblem.id, res)}
-                      style={{ marginTop: '2px' }}
-                    />
-                    <div>
-                      <div style={{ fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--text-sm)' }}>
-                        {t(`wizard.resolution.${res}`)}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+                  {(['skip', 'import_empty', 'convert_freetext'] as Resolution[]).map(res => (
+                    <label
+                      key={res}
+                      style={{
+                        display: 'flex', alignItems: 'flex-start', gap: 'var(--space-md)',
+                        padding: 'var(--space-md)',
+                        border: `2px solid ${resolutions[selectedProblem.id] === res ? 'var(--color-primary-solid)' : 'var(--color-border)'}`,
+                        borderRadius: 'var(--radius-md)',
+                        cursor: 'pointer',
+                        background: resolutions[selectedProblem.id] === res ? 'var(--color-bg-tertiary)' : 'transparent'
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name={`resolution-${selectedProblem.id}`}
+                        value={res}
+                        checked={resolutions[selectedProblem.id] === res}
+                        onChange={() => setResolution(selectedProblem.id, res)}
+                        style={{ marginTop: '2px' }}
+                      />
+                      <div>
+                        <div style={{ fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--text-sm)' }}>
+                          {t(`wizard.resolution.${res}`)}
+                        </div>
+                        <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
+                          {t(`wizard.resolutionDesc.${res}`)}
+                        </div>
                       </div>
-                      <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
-                        {t(`wizard.resolutionDesc.${res}`)}
-                      </div>
-                    </div>
-                  </label>
-                ))}
+                    </label>
+                  ))}
+                </div>
 
                 {problems.filter(p => p.type === selectedProblem.type).length > 1 && resolutions[selectedProblem.id] && (
                   <button
