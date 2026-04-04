@@ -10,6 +10,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { SessionPage } from './pages/SessionPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { TemplatesPage } from './pages/TemplatesPage';
+import { AboutPage } from './pages/AboutPage';
 import { Toast } from './components/Toast';
 import { ConfirmDialog } from './components/ConfirmDialog';
 
@@ -71,6 +72,7 @@ function App() {
         <Route path="/session/:id" element={<SessionPage />} />
         <Route path="/templates" element={<TemplatesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Toast />

@@ -35,7 +35,7 @@ export function AccentColorSwitcher() {
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Change accent color"
         style={{
-          background: 'var(--color-bg-tertiary)',
+          background: accentColors[currentColor].primary,
           border: '2px solid var(--color-border)',
           borderRadius: 'var(--radius-md)',
           width: '36px',
@@ -45,7 +45,7 @@ export function AccentColorSwitcher() {
           justifyContent: 'center',
           cursor: 'pointer',
           transition: 'all var(--transition-base)',
-          color: 'var(--color-text-secondary)',
+          color: 'white',
         }}
       >
         <Palette size={18} />

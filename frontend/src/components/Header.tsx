@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore.js';
 import { useUIStore } from '../stores/uiStore.js';
 import { useTranslation } from 'react-i18next';
-import { Settings, LogOut } from 'lucide-react';
+import { Settings, LogOut, Home, Info } from 'lucide-react';
 import { ThemeSwitcher } from './ThemeSwitcher.js';
 import { AccentColorSwitcher } from './AccentColorSwitcher.js';
 
@@ -54,30 +54,34 @@ export function Header() {
       </Link>
 
       <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center' }}>
+        <Link
+          to="/"
+          style={{ color: 'var(--color-text-secondary)', display: 'flex', padding: 'var(--space-sm)', borderRadius: 'var(--radius-md)', transition: 'all var(--transition-fast)' }}
+          title={t('common:home')}
+        >
+          <Home size={20} />
+        </Link>
+
         <AccentColorSwitcher />
         <ThemeSwitcher />
 
         <Link
           to="/settings"
-          style={{
-            color: 'var(--color-text-secondary)',
-            display: 'flex',
-            padding: 'var(--space-sm)',
-            borderRadius: 'var(--radius-md)',
-            transition: 'all var(--transition-fast)',
-          }}
+          style={{ color: 'var(--color-text-secondary)', display: 'flex', padding: 'var(--space-sm)', borderRadius: 'var(--radius-md)', transition: 'all var(--transition-fast)' }}
         >
           <Settings size={20} />
         </Link>
 
+        <Link
+          to="/about"
+          style={{ color: 'var(--color-text-secondary)', display: 'flex', padding: 'var(--space-sm)', borderRadius: 'var(--radius-md)', transition: 'all var(--transition-fast)' }}
+        >
+          <Info size={20} />
+        </Link>
+
         <button
           onClick={handleLogout}
-          style={{
-            color: 'var(--color-text-secondary)',
-            padding: 'var(--space-sm)',
-            display: 'flex',
-            borderRadius: 'var(--radius-md)',
-          }}
+          style={{ color: 'var(--color-text-secondary)', padding: 'var(--space-sm)', display: 'flex', borderRadius: 'var(--radius-md)' }}
         >
           <LogOut size={20} />
         </button>

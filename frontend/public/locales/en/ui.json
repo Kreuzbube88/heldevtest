@@ -100,6 +100,21 @@
     "passwordChanged": "Password changed successfully",
     "passwordChangeFailed": "Password change failed"
   },
+  "about": {
+    "tagline": "Interactive test documentation for manual QA workflows",
+    "whatIs": "What is HELDEVTEST?",
+    "description": "HELDEVTEST is a test documentation tool for manual QA. Upload markdown test plans, execute tests with status tracking (Pass/Fail/Skip), and export reports in Markdown, HTML, or JSON. Self-hosted, single-user with auto-save and session recovery.",
+    "features": "Features",
+    "feature1": "Markdown Test Upload",
+    "feature2": "Status Tracking (Pass/Fail/Skip)",
+    "feature3": "Auto-Save & Session Recovery",
+    "feature4": "Export (MD/HTML/JSON)",
+    "feature5": "Pre-defined Templates",
+    "feature6": "Multi-language (DE/EN)",
+    "creator": "Creator",
+    "creatorBio": "Open-source developer focused on practical tools for developers and QA teams.",
+    "links": "Useful Links"
+  },
   "toast": {
     "uploadSuccess": "Test uploaded successfully",
     "uploadError": "Upload failed",

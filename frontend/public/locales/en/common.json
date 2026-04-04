@@ -9,5 +9,6 @@
   "close": "Close",
   "export": "Export",
   "logout": "Logout",
-  "settings": "Settings"
+  "settings": "Settings",
+  "home": "Home"
 }
