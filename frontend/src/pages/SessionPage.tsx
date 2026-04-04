@@ -50,12 +50,13 @@ export function SessionPage() {
     return existing?.status ?? 'pending';
   }, [localResults, currentResults]);
 
-  const getResult = (testPath: string): { status: string; bugs: string } => {
+  const getResult = (testPath: string): { status: string; bugs: string; updated_at?: string } => {
     const local = localResults.get(testPath);
     const existing = currentResults.find(r => r.test_path === testPath);
     return {
       status: local?.status ?? existing?.status ?? 'pending',
       bugs: (local?.bugs ?? existing?.bugs ?? '') as string,
+      updated_at: existing?.updated_at,
     };
   };
 
@@ -75,8 +76,7 @@ export function SessionPage() {
             Number(id),
             testPath,
             (resultLocal.status ?? existing?.status ?? 'pending') as string,
-            (resultLocal.bugs ?? existing?.bugs ?? '') as string,
-            (resultLocal.duration_seconds ?? existing?.duration_seconds) as number | null
+            (resultLocal.bugs ?? existing?.bugs ?? '') as string
           );
           setSaving(false);
         } catch {

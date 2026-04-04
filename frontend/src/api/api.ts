@@ -107,11 +107,11 @@ export const api = {
     return res.json();
   },
 
-  async saveTestResult(sessionId: number, testPath: string, status: string, bugs: string, duration?: number | null) {
+  async saveTestResult(sessionId: number, testPath: string, status: string, bugs: string) {
     const res = await fetch(`${API_BASE}/sessions/${sessionId}/results`, {
       method: 'POST',
       headers: getAuthHeaders(),
-      body: JSON.stringify({ test_path: testPath, status, bugs, duration_seconds: duration })
+      body: JSON.stringify({ test_path: testPath, status, bugs })
     });
     if (!res.ok) throw new Error(await res.text());
     return res.json();

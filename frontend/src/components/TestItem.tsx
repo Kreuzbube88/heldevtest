@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { Check, X, Minus, CheckCircle, XCircle, AlertCircle, Circle } from 'lucide-react';
+import { Check, X, Minus, CheckCircle, XCircle, AlertCircle, Circle, Clock } from 'lucide-react';
 import type { Test } from '../types';
+import { formatTimestamp, formatRelativeTime } from '../utils/dateFormatter.js';
 
 interface TestResult {
   status: string;
   bugs: string;
+  updated_at?: string;
 }
 
 interface Props {
@@ -15,8 +17,8 @@ interface Props {
 }
 
 export function TestItem({ test, result, onStatusChange, onBugsChange }: Props) {
-  const { t } = useTranslation('ui');
-  const { status, bugs } = result;
+  const { t, i18n } = useTranslation('ui');
+  const { status, bugs, updated_at } = result;
 
   const getBorderColor = () => {
     if (status === 'pass') return 'var(--color-success)';
@@ -58,15 +60,26 @@ export function TestItem({ test, result, onStatusChange, onBugsChange }: Props) 
           <h4 style={{ margin: 0 }}>{test.title}</h4>
         </div>
         {(status === 'pass' || status === 'fail' || status === 'skip') && (
-          <span className={
-            status === 'pass' ? 'badge badge-success' :
-            status === 'fail' ? 'badge badge-error' :
-            'badge badge-warning'
-          }>
-            {status === 'pass' ? t('session.statusPass') :
-             status === 'fail' ? t('session.statusFail') :
-             t('session.statusSkip')}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
+            <span className={
+              status === 'pass' ? 'badge badge-success' :
+              status === 'fail' ? 'badge badge-error' :
+              'badge badge-warning'
+            }>
+              {status === 'pass' ? t('session.statusPass') :
+               status === 'fail' ? t('session.statusFail') :
+               t('session.statusSkip')}
+            </span>
+            {updated_at && (
+              <span
+                title={formatTimestamp(updated_at, i18n.language)}
+                style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-tertiary)' }}
+              >
+                <Clock size={13} />
+                {formatRelativeTime(updated_at, i18n.language)}
+              </span>
+            )}
+          </div>
         )}
       </div>
 

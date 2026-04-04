@@ -6,13 +6,14 @@ import { useUIStore } from '../stores/uiStore';
 import { api } from '../api/api';
 import { Header } from '../components/Header';
 import { BackgroundLogo } from '../components/BackgroundLogo';
-import { Upload, FileText, Trash2 } from 'lucide-react';
+import { Upload, FileText, Trash2, Clock } from 'lucide-react';
+import { formatRelativeTime, formatTimestamp } from '../utils/dateFormatter.js';
 import type { TestSession } from '../types';
 
 export function DashboardPage() {
   const { sessions, setSessions } = useSessionStore();
   const { addToast, openConfirm } = useUIStore();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const loadSessions = useCallback(async () => {
@@ -101,6 +102,14 @@ export function DashboardPage() {
                     {t('ui:dashboard.sessionProgress')}: {session.completed_tests}/{session.total_tests} |{' '}
                     ✓ {session.passed_tests} | ✗ {session.failed_tests} | ⊘ {session.skipped_tests}
                   </div>
+                  {session.updated_at && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--color-text-tertiary)', fontSize: 'var(--font-size-xs)', marginTop: 'var(--space-xs)' }}>
+                      <Clock size={13} />
+                      <span title={formatTimestamp(session.updated_at, i18n.language)}>
+                        {formatRelativeTime(session.updated_at, i18n.language)}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <button className="btn-danger" onClick={() => handleDelete(session.id)}>
                   <Trash2 size={20} />

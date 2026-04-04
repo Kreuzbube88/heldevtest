@@ -31,7 +31,6 @@ export interface TestResult {
   test_path: string;
   status: 'pending' | 'pass' | 'fail' | 'skip';
   bugs: string;
-  duration_seconds: number | null;
   created_at: string;
   updated_at: string;
 }
