@@ -1,8 +1,9 @@
 import { marked } from 'marked';
-import type { ParsedTestPlan, TestSection, TestSubsection, Test } from '../types/index.js';
+import { randomUUID } from 'crypto';
+import type { ParsedTestPlan, TestSection, TestSubsection, Test, Problem, ParseResult } from '../types/index.js';
 
 export class MarkdownParserService {
-  static parse(markdown: string): ParsedTestPlan {
+  static parse(markdown: string): ParseResult {
     const tokens = marked.lexer(markdown);
     const plan: ParsedTestPlan = { title: '', sections: [] };
 
@@ -20,7 +21,12 @@ export class MarkdownParserService {
           sectionCounter++;
           subsectionCounter = 0;
           testCounter = 0;
-          currentSection = { id: String(sectionCounter), title: token.text, subsections: [] };
+          currentSection = {
+            id: String(sectionCounter),
+            title: token.text,
+            type: 'tests',
+            subsections: []
+          };
           plan.sections.push(currentSection);
           currentSubsection = null;
         } else if (token.depth === 3 && currentSection) {
@@ -61,6 +67,40 @@ export class MarkdownParserService {
       }
     }
 
-    return plan;
+    // Ensure every section has at least a default subsection if it has no subsections
+    for (const section of plan.sections) {
+      if (section.subsections.length === 0) {
+        section.subsections.push({
+          id: `${section.id}.0`,
+          title: section.title,
+          tests: []
+        });
+      }
+    }
+
+    const problems = MarkdownParserService.detectProblems(plan);
+    return { plan, problems };
+  }
+
+  private static detectProblems(plan: ParsedTestPlan): Problem[] {
+    const problems: Problem[] = [];
+
+    plan.sections.forEach((section, idx) => {
+      const totalTests = section.subsections.reduce((sum, sub) => sum + sub.tests.length, 0);
+      if (totalTests === 0) {
+        problems.push({
+          id: randomUUID(),
+          type: 'empty_section',
+          severity: 'warning',
+          location: {
+            section: section.title,
+            sectionIndex: idx
+          },
+          suggestion: 'This section has no tests. Convert to freetext or skip.'
+        });
+      }
+    });
+
+    return problems;
   }
 }

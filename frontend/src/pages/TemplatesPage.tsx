@@ -32,8 +32,8 @@ export function TemplatesPage() {
     const file = new File([blob], `${template.name}.md`, { type: 'text/markdown' });
 
     try {
-      const session = await api.uploadTest(file) as { id: number };
-      navigate(`/session/${session.id}`);
+      const response = await api.uploadTest(file);
+      if (response.sessionId) navigate(`/session/${response.sessionId}`);
     } catch {
       addToast('error', t('ui:toast.error'));
     }

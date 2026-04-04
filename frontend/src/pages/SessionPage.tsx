@@ -12,14 +12,17 @@ import { ArrowLeft, ArrowRight, Download } from 'lucide-react';
 import { getSectionStats, getOverallStats } from '../utils/sessionUtils';
 import type { TestSession, TestResult } from '../types';
 
+
 export function SessionPage() {
   const { id } = useParams<{ id: string }>();
-  const { currentSession, currentResults, localResults, setCurrentSession, updateLocalResult } = useSessionStore();
+  const { currentSession, currentResults, localResults, setCurrentSession, updateLocalResult, updateSectionContent } = useSessionStore();
   const { addToast, setSaving, isSaving } = useUIStore();
   const { t } = useTranslation('ui');
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const freetextTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const localResultsRef = useRef(localResults);
   useEffect(() => { localResultsRef.current = localResults; }, [localResults]);
+  const mainRef = useRef<HTMLElement>(null);
 
   const [currentSectionId, setCurrentSectionId] = useState('');
 
@@ -115,11 +118,34 @@ export function SessionPage() {
   const overallStats = getOverallStats(sections, getStatus);
 
   const handlePrevious = () => {
-    if (currentIndex > 0) setCurrentSectionId(sectionIds[currentIndex - 1]);
+    if (currentIndex > 0) {
+      setCurrentSectionId(sectionIds[currentIndex - 1]);
+      mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleNext = () => {
-    if (currentIndex < sectionIds.length - 1) setCurrentSectionId(sectionIds[currentIndex + 1]);
+    if (currentIndex < sectionIds.length - 1) {
+      setCurrentSectionId(sectionIds[currentIndex + 1]);
+      mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleFreetextChange = (sectionId: string, content: string) => {
+    updateSectionContent(sectionId, content);
+    setSaving(true);
+    if (freetextTimeoutRef.current) clearTimeout(freetextTimeoutRef.current);
+    freetextTimeoutRef.current = setTimeout(() => {
+      void (async () => {
+        try {
+          await api.updateSectionContent(Number(id), sectionId, content);
+          setSaving(false);
+        } catch {
+          setSaving(false);
+          addToast('error', t('toast.error'));
+        }
+      })();
+    }, 500);
   };
 
   return (
@@ -137,7 +163,7 @@ export function SessionPage() {
         />
 
         {/* Center: Test Content */}
-        <main style={{ flex: 1, overflowY: 'auto', padding: 'var(--space-xl)', position: 'relative', zIndex: 1 }}>
+        <main ref={mainRef} style={{ flex: 1, overflowY: 'auto', padding: 'var(--space-xl)', position: 'relative', zIndex: 1 }}>
           {currentSection && (() => {
             const sectionStats = getSectionStats(currentSection, getStatus);
             return (
@@ -151,43 +177,69 @@ export function SessionPage() {
                     </span>
                   </div>
 
-                  <div className="progress" style={{ marginTop: 'var(--space-md)' }}>
-                    <div className="progress-bar" style={{ width: `${sectionStats.percentage}%` }} />
-                  </div>
-
-                  <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)', flexWrap: 'wrap' }}>
-                    <span className="badge badge-success">{sectionStats.passed} {t('session.statusPass')}</span>
-                    <span className="badge badge-error">{sectionStats.failed} {t('session.statusFail')}</span>
-                    <span className="badge badge-warning">{sectionStats.skipped} {t('session.statusSkip')}</span>
-                    <span className="badge badge-info">{sectionStats.notStarted} {t('session.notStarted')}</span>
-                  </div>
+                  {currentSection.type !== 'freetext' && (
+                    <>
+                      <div className="progress" style={{ marginTop: 'var(--space-md)' }}>
+                        <div className="progress-bar" style={{ width: `${sectionStats.percentage}%` }} />
+                      </div>
+                      <div style={{ display: 'flex', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)', flexWrap: 'wrap' }}>
+                        <span className="badge badge-success">{sectionStats.passed} {t('session.statusPass')}</span>
+                        <span className="badge badge-error">{sectionStats.failed} {t('session.statusFail')}</span>
+                        <span className="badge badge-warning">{sectionStats.skipped} {t('session.statusSkip')}</span>
+                        <span className="badge badge-info">{sectionStats.notStarted} {t('session.notStarted')}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
-                {/* Tests grouped by subsection */}
-                {currentSection.subsections.map(sub => (
-                  <div key={sub.id} style={{ marginBottom: 'var(--space-xl)' }}>
-                    {currentSection.subsections.length > 1 && (
-                      <h3 style={{ marginBottom: 'var(--space-md)', paddingBottom: 'var(--space-sm)', borderBottom: '1px solid var(--color-border)' }}>
-                        {sub.title}
-                      </h3>
-                    )}
-                    {sub.tests.length === 0 ? (
-                      <p style={{ color: 'var(--color-text-tertiary)', fontSize: 'var(--text-sm)' }}>
-                        {t('session.noTests')}
-                      </p>
-                    ) : (
-                      sub.tests.map(test => (
-                        <TestItem
-                          key={test.path}
-                          test={test}
-                          result={getResult(test.path)}
-                          onStatusChange={(status) => handleResultChange(test.path, 'status', status)}
-                          onBugsChange={(bugs) => handleResultChange(test.path, 'bugs', bugs)}
-                        />
-                      ))
-                    )}
+                {/* Tests or Freetext */}
+                {currentSection.type === 'freetext' ? (
+                  <div className="card" style={{ padding: 'var(--space-xl)' }}>
+                    <textarea
+                      value={currentSection.content ?? ''}
+                      onChange={(e) => handleFreetextChange(currentSection.id, e.target.value)}
+                      placeholder={t('session.freetextPlaceholder')}
+                      style={{
+                        width: '100%',
+                        minHeight: '300px',
+                        padding: 'var(--space-md)',
+                        fontSize: 'var(--text-base)',
+                        fontFamily: 'inherit',
+                        border: '2px solid var(--color-border)',
+                        borderRadius: 'var(--radius-md)',
+                        resize: 'vertical',
+                        background: 'var(--color-bg-primary)',
+                        color: 'var(--color-text-primary)',
+                        boxSizing: 'border-box'
+                      }}
+                    />
                   </div>
-                ))}
+                ) : (
+                  currentSection.subsections.map(sub => (
+                    <div key={sub.id} style={{ marginBottom: 'var(--space-xl)' }}>
+                      {currentSection.subsections.length > 1 && (
+                        <h3 style={{ marginBottom: 'var(--space-md)', paddingBottom: 'var(--space-sm)', borderBottom: '1px solid var(--color-border)' }}>
+                          {sub.title}
+                        </h3>
+                      )}
+                      {sub.tests.length === 0 ? (
+                        <p style={{ color: 'var(--color-text-tertiary)', fontSize: 'var(--text-sm)' }}>
+                          {t('session.noTests')}
+                        </p>
+                      ) : (
+                        sub.tests.map(test => (
+                          <TestItem
+                            key={test.path}
+                            test={test}
+                            result={getResult(test.path)}
+                            onStatusChange={(status) => handleResultChange(test.path, 'status', status)}
+                            onBugsChange={(bugs) => handleResultChange(test.path, 'bugs', bugs)}
+                          />
+                        ))
+                      )}
+                    </div>
+                  ))
+                )}
 
                 {/* Prev / Next navigation */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'var(--space-xl)', paddingTop: 'var(--space-lg)', borderTop: '1px solid var(--color-border)' }}>

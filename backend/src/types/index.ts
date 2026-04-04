@@ -58,7 +58,32 @@ export interface ParsedTestPlan {
 export interface TestSection {
   id: string;
   title: string;
+  type: 'tests' | 'freetext';
+  content?: string;
   subsections: TestSubsection[];
+}
+
+export interface Problem {
+  id: string;
+  type: 'empty_section' | 'empty_subsection' | 'no_tests';
+  severity: 'warning' | 'info';
+  location: {
+    section: string;
+    sectionIndex: number;
+    subsection?: string;
+  };
+  suggestion: string;
+}
+
+export interface ParseResult {
+  plan: ParsedTestPlan;
+  problems: Problem[];
+}
+
+export type Resolution = 'skip' | 'import_empty' | 'convert_freetext';
+
+export interface ResolveProblemBody {
+  resolutions: Record<string, Resolution>;
 }
 
 export interface TestSubsection {

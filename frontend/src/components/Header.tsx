@@ -7,7 +7,7 @@ import { ThemeSwitcher } from './ThemeSwitcher.js';
 import { AccentColorSwitcher } from './AccentColorSwitcher.js';
 
 export function Header() {
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
   const { openConfirm } = useUIStore();
   const { t } = useTranslation('ui');
 
@@ -54,6 +54,11 @@ export function Header() {
       </Link>
 
       <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center' }}>
+        {user && (
+          <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', padding: '0 var(--space-sm)' }}>
+            {user.username}
+          </span>
+        )}
         <Link
           to="/"
           style={{ color: 'var(--color-text-secondary)', display: 'flex', padding: 'var(--space-sm)', borderRadius: 'var(--radius-md)', transition: 'all var(--transition-fast)' }}

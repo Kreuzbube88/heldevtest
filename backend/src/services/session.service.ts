@@ -1,5 +1,5 @@
 import db from '../database/db.js';
-import type { TestSession, TestResult, ParsedTestPlan } from '../types/index.js';
+import type { TestSession, TestResult, ParsedTestPlan, Resolution } from '../types/index.js';
 
 export class SessionService {
   static createSession(userId: number, name: string, filename: string, parsedPlan: ParsedTestPlan): TestSession {
@@ -69,6 +69,66 @@ export class SessionService {
 
   static getSessionResults(sessionId: number): TestResult[] {
     return db.prepare('SELECT * FROM test_results WHERE session_id = ?').all(sessionId) as TestResult[];
+  }
+
+  static applyResolutions(sessionId: number, resolutions: Record<string, Resolution>): TestSession | undefined {
+    const session = this.getSessionById(sessionId);
+    if (!session) return undefined;
+
+    const plan = session.markdown_structure as unknown as ParsedTestPlan;
+    const indicesToRemove = new Set<number>();
+
+    for (const [sectionIndexStr, resolution] of Object.entries(resolutions)) {
+      const idx = Number(sectionIndexStr);
+      const section = plan.sections[idx];
+      if (!section) continue;
+
+      if (resolution === 'skip') {
+        indicesToRemove.add(idx);
+      } else if (resolution === 'import_empty') {
+        section.type = 'tests';
+      } else if (resolution === 'convert_freetext') {
+        section.type = 'freetext';
+        section.content = '';
+        section.subsections = [];
+      }
+    }
+
+    plan.sections = plan.sections.filter((_, i) => !indicesToRemove.has(i));
+
+    const totalTests = plan.sections.reduce(
+      (sum, section) =>
+        sum + section.subsections.reduce((subSum, subsection) => subSum + subsection.tests.length, 0),
+      0
+    );
+
+    db.prepare(`
+      UPDATE test_sessions
+      SET markdown_structure = ?, total_tests = ?, updated_at = datetime('now')
+      WHERE id = ?
+    `).run(JSON.stringify(plan), totalTests, sessionId);
+
+    return this.getSessionById(sessionId);
+  }
+
+  static updateSectionContent(sessionId: number, sectionId: string, content: string): boolean {
+    const session = this.getSessionById(sessionId);
+    if (!session) return false;
+
+    const plan = session.markdown_structure as unknown as ParsedTestPlan;
+    const section = plan.sections.find(s => s.id === sectionId);
+    if (!section) return false;
+
+    section.content = content;
+    section.type = 'freetext';
+
+    db.prepare(`
+      UPDATE test_sessions
+      SET markdown_structure = ?, updated_at = datetime('now')
+      WHERE id = ?
+    `).run(JSON.stringify(plan), sessionId);
+
+    return true;
   }
 
   private static updateSessionProgress(sessionId: number): void {

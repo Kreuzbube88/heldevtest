@@ -10,6 +10,7 @@ interface SessionState {
   setCurrentSession: (session: TestSession, results: TestResult[]) => void;
   updateLocalResult: (testPath: string, updates: Partial<TestResult>) => void;
   clearLocalResults: () => void;
+  updateSectionContent: (sectionId: string, content: string) => void;
 }
 
 export const useSessionStore = create<SessionState>((set) => ({
@@ -32,5 +33,18 @@ export const useSessionStore = create<SessionState>((set) => ({
     return { localResults: newMap };
   }),
 
-  clearLocalResults: () => set({ localResults: new Map() })
+  clearLocalResults: () => set({ localResults: new Map() }),
+
+  updateSectionContent: (sectionId, content) => set((state) => {
+    if (!state.currentSession) return state;
+    const sections = state.currentSession.markdown_structure.sections.map(s =>
+      s.id === sectionId ? { ...s, content } : s
+    );
+    return {
+      currentSession: {
+        ...state.currentSession,
+        markdown_structure: { ...state.currentSession.markdown_structure, sections }
+      }
+    };
+  })
 }));

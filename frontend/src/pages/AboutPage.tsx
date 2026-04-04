@@ -20,7 +20,7 @@ export function AboutPage() {
             style={{
               width: '700px',
               height: 'auto',
-              margin: '0 auto var(--space-xl)',
+              margin: '0 auto var(--space-xs)',
               display: 'block',
               filter: 'drop-shadow(0 10px 20px rgba(102, 126, 234, 0.3))'
             }}

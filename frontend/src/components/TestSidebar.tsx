@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronRight, CheckCircle, XCircle, AlertCircle, Circle } from 'lucide-react';
+import { ChevronDown, ChevronRight, CheckCircle, XCircle, AlertCircle, Circle, FileText } from 'lucide-react';
 import type { TestSection } from '../types';
 import { getSectionStats, getSubsectionStats, type SectionStats } from '../utils/sessionUtils';
 
@@ -11,7 +11,8 @@ interface Props {
   onSectionClick: (id: string) => void;
 }
 
-function StatusIcon({ stats }: { stats: SectionStats }) {
+function StatusIcon({ stats, freetext }: { stats: SectionStats; freetext?: boolean }) {
+  if (freetext) return <FileText size={14} color="var(--color-text-tertiary)" />;
   if (stats.total === 0 || stats.notStarted === stats.total) {
     return <Circle size={14} color="var(--color-text-tertiary)" />;
   }
@@ -83,7 +84,7 @@ export function TestSidebar({ sections, getStatus, currentSectionId, onSectionCl
                 </button>
               )}
 
-              <StatusIcon stats={stats} />
+              <StatusIcon stats={stats} freetext={section.type === 'freetext'} />
 
               <span style={{
                 flex: 1,
@@ -97,9 +98,11 @@ export function TestSidebar({ sections, getStatus, currentSectionId, onSectionCl
                 {section.title}
               </span>
 
-              <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-tertiary)', flexShrink: 0 }}>
-                {stats.passed}/{stats.total}
-              </span>
+              {section.type !== 'freetext' && (
+                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-tertiary)', flexShrink: 0 }}>
+                  {stats.passed}/{stats.total}
+                </span>
+              )}
             </div>
 
             {isExpanded && section.subsections.map(sub => {
