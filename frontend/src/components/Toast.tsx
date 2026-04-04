@@ -14,7 +14,7 @@ export function Toast() {
   return (
     <div style={{
       position: 'fixed',
-      top: 'var(--space-lg)',
+      bottom: 'var(--space-lg)',
       right: 'var(--space-lg)',
       zIndex: 'var(--z-toast)' as React.CSSProperties['zIndex'],
       display: 'flex',

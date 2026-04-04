@@ -1,4 +1,4 @@
-import { Github, Heart, FileText, BookOpen, Bug, MessageCircle } from 'lucide-react';
+import { Github, Heart, FileText, BookOpen, Bug } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Header } from '../components/Header.js';
 import { BackgroundLogo } from '../components/BackgroundLogo.js';
@@ -18,14 +18,13 @@ export function AboutPage() {
             src="/logo.png"
             alt="HELDEVTEST"
             style={{
-              width: '200px',
+              width: '700px',
               height: 'auto',
               margin: '0 auto var(--space-xl)',
               display: 'block',
               filter: 'drop-shadow(0 10px 20px rgba(102, 126, 234, 0.3))'
             }}
           />
-          <h1 style={{ marginBottom: 'var(--space-sm)' }}>HELDEVTEST</h1>
           <p style={{ fontSize: 'var(--text-xl)', color: 'var(--color-text-secondary)', margin: 0 }}>
             {t('ui:about.tagline')}
           </p>
@@ -66,37 +65,6 @@ export function AboutPage() {
                 <span style={{ fontSize: 'var(--text-sm)' }}>{feature.text}</span>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Creator */}
-        <div className="card" style={{ marginBottom: 'var(--space-xl)' }}>
-          <h2>{t('ui:about.creator')}</h2>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--space-lg)',
-            marginTop: 'var(--space-md)'
-          }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              borderRadius: '50%',
-              background: 'var(--color-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 'var(--text-4xl)',
-              flexShrink: 0
-            }}>
-              🛠️
-            </div>
-            <div>
-              <h3 style={{ margin: 0, marginBottom: 'var(--space-xs)' }}>Kreuzbube88</h3>
-              <p style={{ margin: 0, color: 'var(--color-text-secondary)' }}>
-                {t('ui:about.creatorBio')}
-              </p>
-            </div>
           </div>
         </div>
 
@@ -143,20 +111,6 @@ export function AboutPage() {
               <div style={{ flex: 1, textAlign: 'left' }}>
                 <div style={{ fontWeight: 'var(--font-weight-semibold)' }}>Report Issues</div>
                 <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-tertiary)' }}>Bug reports and feature requests</div>
-              </div>
-            </a>
-
-            <a
-              href="https://github.com/Kreuzbube88/heldevtest/discussions"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary"
-              style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', justifyContent: 'flex-start', textDecoration: 'none' }}
-            >
-              <MessageCircle size={20} />
-              <div style={{ flex: 1, textAlign: 'left' }}>
-                <div style={{ fontWeight: 'var(--font-weight-semibold)' }}>Discussions</div>
-                <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-tertiary)' }}>Ask questions and share ideas</div>
               </div>
             </a>
 
