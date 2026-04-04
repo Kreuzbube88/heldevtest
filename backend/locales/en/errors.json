@@ -1,0 +1,10 @@
+{
+  "unauthorized": "Unauthorized",
+  "userExists": "User already exists",
+  "invalidCredentials": "Invalid credentials",
+  "sessionNotFound": "Session not found",
+  "templateNotFound": "Template not found",
+  "fileUploadFailed": "File upload failed",
+  "invalidFileType": "Invalid file type. Only .md files allowed",
+  "internalError": "Internal server error"
+}

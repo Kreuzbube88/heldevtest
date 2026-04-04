@@ -1,0 +1,10 @@
+{
+  "unauthorized": "Nicht autorisiert",
+  "userExists": "Benutzer existiert bereits",
+  "invalidCredentials": "Ungültige Anmeldedaten",
+  "sessionNotFound": "Sitzung nicht gefunden",
+  "templateNotFound": "Vorlage nicht gefunden",
+  "fileUploadFailed": "Datei-Upload fehlgeschlagen",
+  "invalidFileType": "Ungültiger Dateityp. Nur .md Dateien erlaubt",
+  "internalError": "Interner Serverfehler"
+}

@@ -1,0 +1,7 @@
+{
+  "usernameRequired": "Benutzername ist erforderlich",
+  "passwordRequired": "Passwort ist erforderlich",
+  "passwordTooShort": "Passwort muss mindestens 8 Zeichen lang sein",
+  "languageRequired": "Sprache ist erforderlich",
+  "languageInvalid": "Ungültige Sprache. Erlaubt: de, en"
+}
