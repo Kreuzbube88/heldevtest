@@ -14,10 +14,11 @@ import { ConfirmDialog } from './components/ConfirmDialog';
 
 function App() {
   const [setupRequired, setSetupRequired] = useState<boolean | null>(null);
-  const { token } = useAuthStore();
+  const { token, initializeAuth } = useAuthStore();
   const { t } = useTranslation();
 
   useEffect(() => {
+    initializeAuth();
     void (async () => {
       try {
         const data = await api.checkSetupStatus() as { setupRequired: boolean };
@@ -26,7 +27,7 @@ function App() {
         setSetupRequired(false);
       }
     })();
-  }, []);
+  }, [initializeAuth]);
 
   if (setupRequired === null) {
     return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{t('common:loading')}</div>;

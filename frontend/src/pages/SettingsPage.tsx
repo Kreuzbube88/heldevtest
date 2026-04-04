@@ -40,7 +40,7 @@ export function SettingsPage() {
         <div className="card">
           <h2 style={{ marginBottom: 'var(--space-md)' }}>{t('ui:settings.account')}</h2>
           <div style={{ color: 'var(--color-text-secondary)' }}>
-            {t('ui:login.username')}: {user?.username}
+            {t('ui:login.username')}: <strong>{user?.username}</strong>
           </div>
         </div>
       </div>
