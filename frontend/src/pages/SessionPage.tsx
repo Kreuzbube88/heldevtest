@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useCallback, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSessionStore } from '../stores/sessionStore';
@@ -11,6 +11,9 @@ import { TestItem } from '../components/TestItem';
 import { ArrowLeft, ArrowRight, Download } from 'lucide-react';
 import { getSectionStats, getOverallStats } from '../utils/sessionUtils';
 import type { TestSession, TestResult } from '../types';
+import { FixedSizeList } from 'react-window';
+import type { ListChildComponentProps } from 'react-window';
+import type { Test, TestSubsection } from '../types';
 
 
 export function SessionPage() {
@@ -67,6 +70,53 @@ export function SessionPage() {
       bugs: (local?.bugs ?? existing?.bugs ?? '') as string,
       updated_at: existing?.updated_at,
     };
+  };
+
+  const makeTestRowRenderer = (tests: Test[]) =>
+    ({ index, style }: ListChildComponentProps) => {
+      const test = tests[index];
+      if (!test) return null;
+      return (
+        <div style={style}>
+          <TestItem
+            test={test}
+            result={getResult(test.path)}
+            onStatusChange={(status) => handleResultChange(test.path, 'status', status)}
+            onBugsChange={(bugs) => handleResultChange(test.path, 'bugs', bugs)}
+          />
+        </div>
+      );
+    };
+
+  const renderTestList = (sub: TestSubsection): React.ReactNode => {
+    if (sub.tests.length === 0) {
+      return (
+        <p style={{ color: 'var(--color-text-tertiary)', fontSize: 'var(--text-sm)' }}>
+          {t('session.noTests')}
+        </p>
+      );
+    }
+    if (sub.tests.length > 50) {
+      return (
+        <FixedSizeList
+          height={600}
+          itemCount={sub.tests.length}
+          itemSize={120}
+          width="100%"
+        >
+          {makeTestRowRenderer(sub.tests)}
+        </FixedSizeList>
+      );
+    }
+    return sub.tests.map(test => (
+      <TestItem
+        key={test.path}
+        test={test}
+        result={getResult(test.path)}
+        onStatusChange={(status) => handleResultChange(test.path, 'status', status)}
+        onBugsChange={(bugs) => handleResultChange(test.path, 'bugs', bugs)}
+      />
+    ));
   };
 
   const handleResultChange = (testPath: string, field: keyof TestResult, value: string | number | null) => {
@@ -226,21 +276,7 @@ export function SessionPage() {
                           {sub.title}
                         </h3>
                       )}
-                      {sub.tests.length === 0 ? (
-                        <p style={{ color: 'var(--color-text-tertiary)', fontSize: 'var(--text-sm)' }}>
-                          {t('session.noTests')}
-                        </p>
-                      ) : (
-                        sub.tests.map(test => (
-                          <TestItem
-                            key={test.path}
-                            test={test}
-                            result={getResult(test.path)}
-                            onStatusChange={(status) => handleResultChange(test.path, 'status', status)}
-                            onBugsChange={(bugs) => handleResultChange(test.path, 'bugs', bugs)}
-                          />
-                        ))
-                      )}
+                      {renderTestList(sub)}
                     </div>
                   ))
                 )}

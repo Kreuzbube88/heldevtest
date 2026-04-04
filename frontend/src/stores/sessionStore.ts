@@ -7,6 +7,7 @@ interface SessionState {
   currentResults: TestResult[];
   localResults: Map<string, Partial<TestResult>>;
   setSessions: (sessions: TestSession[]) => void;
+  appendSessions: (newSessions: TestSession[]) => void;
   setCurrentSession: (session: TestSession, results: TestResult[]) => void;
   updateLocalResult: (testPath: string, updates: Partial<TestResult>) => void;
   clearLocalResults: () => void;
@@ -20,6 +21,7 @@ export const useSessionStore = create<SessionState>((set) => ({
   localResults: new Map(),
 
   setSessions: (sessions) => set({ sessions }),
+  appendSessions: (newSessions) => set((state) => ({ sessions: [...state.sessions, ...newSessions] })),
 
   setCurrentSession: (session, results) => set({
     currentSession: session,

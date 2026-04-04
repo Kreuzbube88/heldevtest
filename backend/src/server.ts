@@ -9,8 +9,10 @@ import { authRoutes } from './routes/auth.routes.js';
 import { sessionRoutes } from './routes/session.routes.js';
 import { templateRoutes } from './routes/template.routes.js';
 import { exportRoutes } from './routes/export.routes.js';
+import { backupRoutes } from './routes/backup.routes.js';
 import { authMiddleware } from './middleware/auth.middleware.js';
 import { errorHandler } from './middleware/error.middleware.js';
+import { rateLimiter } from './middleware/rateLimiter.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
@@ -68,6 +70,7 @@ await fastify.register(authRoutes);
 await fastify.register(sessionRoutes);
 await fastify.register(templateRoutes);
 await fastify.register(exportRoutes);
+await fastify.register(backupRoutes);
 
 // Serve frontend static files (only if dist exists)
 const frontendDist = path.join(__dirname, '../../frontend/dist');
@@ -92,6 +95,8 @@ if (fs.existsSync(frontendDist)) {
 
 // Error handler
 fastify.setErrorHandler(errorHandler);
+
+rateLimiter.startCleanup();
 
 const PORT = Number(process.env.PORT) || 3001;
 const HOST = process.env.HOST || '0.0.0.0';

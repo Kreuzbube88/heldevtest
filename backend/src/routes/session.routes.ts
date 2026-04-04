@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { SessionService } from '../services/session.service.js';
 import { MarkdownParserService } from '../services/markdown-parser.service.js';
 import type { SaveTestResultBody, ResolveProblemBody } from '../types/index.js';
+import { rateLimiter } from '../middleware/rateLimiter.js';
 
 interface SectionContentBody {
   content: string;
@@ -9,7 +10,10 @@ interface SectionContentBody {
 
 export async function sessionRoutes(fastify: FastifyInstance): Promise<void> {
   // Upload test plan
-  fastify.post('/api/sessions/upload', { preHandler: [fastify.authenticate] }, async (request, reply) => {
+  fastify.post(
+    '/api/sessions/upload',
+    { preHandler: [fastify.authenticate, rateLimiter.limit({ windowMs: 60 * 1000, maxRequests: 20 })] },
+    async (request, reply) => {
     const data = await request.file();
 
     if (!data) {
@@ -35,12 +39,28 @@ export async function sessionRoutes(fastify: FastifyInstance): Promise<void> {
     return reply.send({ success: true, sessionId: session.id, problems });
   });
 
-  // Get all sessions
-  fastify.get('/api/sessions', { preHandler: [fastify.authenticate] }, async (request, reply) => {
-    const userId = (request.user as { id: number }).id;
-    const sessions = SessionService.getAllSessions(userId);
-    return reply.send(sessions);
-  });
+  // Get sessions (paginated)
+  fastify.get<{ Querystring: { page?: string; limit?: string } }>(
+    '/api/sessions',
+    { preHandler: [fastify.authenticate] },
+    async (request, reply) => {
+      const userId = (request.user as { id: number }).id;
+      const page = Math.max(1, parseInt(request.query.page ?? '1', 10));
+      const limit = Math.min(100, Math.max(1, parseInt(request.query.limit ?? '20', 10)));
+      const offset = (page - 1) * limit;
+
+      const result = SessionService.getSessionsPaginated(userId, limit, offset);
+      return reply.send({
+        sessions: result.sessions,
+        pagination: {
+          page,
+          limit,
+          total: result.total,
+          hasMore: offset + result.sessions.length < result.total
+        }
+      });
+    }
+  );
 
   // Get single session with results
   fastify.get<{ Params: { id: string } }>(

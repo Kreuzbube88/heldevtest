@@ -77,6 +77,28 @@ export function SettingsPage() {
           </div>
         </div>
 
+        <div className="card" style={{ marginBottom: 'var(--space-lg)' }}>
+          <h2 style={{ marginBottom: 'var(--space-md)' }}>{t('ui:settings.backup')}</h2>
+          <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-md)' }}>
+            {t('ui:settings.backupDescription')}
+          </p>
+          <button
+            className="btn-secondary"
+            onClick={() => {
+              void (async () => {
+                try {
+                  await api.downloadBackup();
+                  addToast('success', t('ui:toast.backupSuccess'));
+                } catch {
+                  addToast('error', t('ui:toast.backupError'));
+                }
+              })();
+            }}
+          >
+            {t('ui:settings.backupDownload')}
+          </button>
+        </div>
+
         <div className="card">
           <h2 style={{ marginBottom: 'var(--space-md)' }}>{t('ui:settings.changePassword')}</h2>
           <form onSubmit={(e) => { void handlePasswordChange(e); }}>

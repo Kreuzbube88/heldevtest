@@ -57,7 +57,8 @@
     "archiveSession": "Archivieren",
     "unarchiveSession": "Dearchivieren",
     "showArchived": "Archivierte anzeigen",
-    "archivedBadge": "Archiviert"
+    "archivedBadge": "Archiviert",
+    "loadMore": "Mehr laden"
   },
   "session": {
     "title": "Test-Sitzung",
@@ -82,7 +83,10 @@
     "notStarted": "Nicht gestartet",
     "bugsPlaceholder": "Beschreibe den Fehler...",
     "noTests": "Keine Tests in diesem Abschnitt",
-    "freetextPlaceholder": "Notizen hier eingeben..."
+    "freetextPlaceholder": "Notizen hier eingeben...",
+    "timeoutWarning": "Sitzung läuft ab",
+    "timeoutMessage": "Deine Sitzung läuft in {{minutes}}:{{seconds}} ab.",
+    "extendSession": "Sitzung verlängern"
   },
   "wizard": {
     "title": "Import-Assistent",
@@ -130,7 +134,10 @@
     "confirmNewPassword": "Neues Passwort bestätigen",
     "passwordMismatch": "Passwörter stimmen nicht überein",
     "passwordChanged": "Passwort erfolgreich geändert",
-    "passwordChangeFailed": "Passwortänderung fehlgeschlagen"
+    "passwordChangeFailed": "Passwortänderung fehlgeschlagen",
+    "backup": "Datenbank-Backup",
+    "backupDescription": "Erstelle eine Sicherungskopie der gesamten Datenbank.",
+    "backupDownload": "Backup herunterladen"
   },
   "about": {
     "tagline": "Interaktive Test-Dokumentation für manuelle QA-Workflows",
@@ -185,7 +192,9 @@
     "error": "Ein Fehler ist aufgetreten",
     "cloneSuccess": "Sitzung dupliziert",
     "archiveSuccess": "Sitzung archiviert",
-    "unarchiveSuccess": "Sitzung dearchiviert"
+    "unarchiveSuccess": "Sitzung dearchiviert",
+    "backupSuccess": "Backup erfolgreich erstellt",
+    "backupError": "Backup fehlgeschlagen"
   },
   "errors": {
     "uploadFailed": "Upload fehlgeschlagen. Stelle sicher, dass die Datei eine .md ist.",

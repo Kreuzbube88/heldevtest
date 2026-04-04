@@ -38,6 +38,16 @@ export class SessionService {
       .all(userId) as TestSession[];
   }
 
+  static getSessionsPaginated(userId: number, limit: number, offset: number): { sessions: TestSession[]; total: number } {
+    const sessions = db
+      .prepare('SELECT * FROM test_sessions WHERE user_id = ? ORDER BY updated_at DESC LIMIT ? OFFSET ?')
+      .all(userId, limit, offset) as TestSession[];
+    const row = db
+      .prepare('SELECT COUNT(*) as count FROM test_sessions WHERE user_id = ?')
+      .get(userId) as { count: number };
+    return { sessions, total: row.count };
+  }
+
   static deleteSession(id: number): void {
     db.prepare('DELETE FROM test_sessions WHERE id = ?').run(id);
   }

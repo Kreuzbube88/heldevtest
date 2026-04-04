@@ -1,4 +1,4 @@
-import type { UploadResponse, Resolution } from '../types';
+import type { UploadResponse, Resolution, TestSession } from '../types';
 
 const API_BASE = '/api';
 
@@ -102,12 +102,28 @@ export const api = {
     if (!res.ok) throw new Error(await res.text());
   },
 
-  async getSessions() {
-    const res = await fetch(`${API_BASE}/sessions`, {
+  async getSessions(params?: { page?: number; limit?: number }): Promise<{ sessions: TestSession[]; pagination: { page: number; limit: number; total: number; hasMore: boolean } }> {
+    const query = params ? `?page=${params.page ?? 1}&limit=${params.limit ?? 20}` : '';
+    const res = await fetch(`${API_BASE}/sessions${query}`, {
       headers: getAuthHeaders()
     });
     if (!res.ok) throw new Error(await res.text());
-    return res.json();
+    return res.json() as Promise<{ sessions: TestSession[]; pagination: { page: number; limit: number; total: number; hasMore: boolean } }>;
+  },
+
+  async downloadBackup(): Promise<void> {
+    const token = getToken();
+    const res = await fetch(`${API_BASE}/backup/download`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `heldevtest-backup-${Date.now()}.db`;
+    a.click();
+    URL.revokeObjectURL(url);
   },
 
   async getSession(id: number) {

@@ -27,7 +27,7 @@ import type { TestSession, Problem, Resolution } from '../types';
 export function DashboardPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { sessions, setSessions } = useSessionStore();
+  const { sessions, setSessions, appendSessions } = useSessionStore();
   const { addToast, openConfirm } = useUIStore();
 
   const [filteredSessions, setFilteredSessions] = useState<TestSession[]>([]);
@@ -36,23 +36,31 @@ export function DashboardPage() {
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState('updated');
   const [showArchived, setShowArchived] = useState(false);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showWizard, setShowWizard] = useState(false);
   const [wizardProblems, setWizardProblems] = useState<Problem[]>([]);
   const [pendingSessionId, setPendingSessionId] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const loadSessions = useCallback(async () => {
+  const loadSessions = useCallback(async (pageNum: number = 1) => {
     try {
-      const data = await api.getSessions() as TestSession[];
-      setSessions(data);
+      const data = await api.getSessions({ page: pageNum, limit: 20 });
+      if (pageNum === 1) {
+        setSessions(data.sessions);
+      } else {
+        appendSessions(data.sessions);
+      }
+      setHasMore(data.pagination.hasMore);
     } catch {
       addToast('error', t('ui:toast.error'));
     }
-  }, [setSessions, addToast, t]);
+  }, [setSessions, appendSessions, addToast, t]);
 
   useEffect(() => {
-    void loadSessions();
+    setPage(1);
+    void loadSessions(1);
   }, [loadSessions]);
 
   useEffect(() => {
@@ -176,7 +184,7 @@ export function DashboardPage() {
           try {
             await api.deleteSession(id);
             addToast('success', t('ui:toast.deleteSuccess'));
-            void loadSessions();
+            setPage(1); void loadSessions(1);
           } catch {
             addToast('error', t('ui:toast.error'));
           }
@@ -189,7 +197,7 @@ export function DashboardPage() {
     try {
       await api.cloneSession(id);
       addToast('success', t('ui:toast.cloneSuccess'));
-      void loadSessions();
+      setPage(1); void loadSessions(1);
     } catch {
       addToast('error', t('ui:toast.error'));
     }
@@ -204,7 +212,7 @@ export function DashboardPage() {
         await api.archiveSession(id);
         addToast('success', t('ui:toast.archiveSuccess'));
       }
-      void loadSessions();
+      setPage(1); void loadSessions(1);
     } catch {
       addToast('error', t('ui:toast.error'));
     }
@@ -320,22 +328,38 @@ export function DashboardPage() {
               : t('ui:dashboard.noSessions')}
           </div>
         ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
-            gap: 'var(--space-xl)'
-          }}>
-            {filteredSessions.map(session => (
-              <SessionCard
-                key={session.id}
-                session={session}
-                onOpen={() => navigate(`/session/${session.id}`)}
-                onDelete={() => handleDelete(session.id)}
-                onClone={() => { void handleClone(session.id); }}
-                onArchive={() => { void handleArchive(session.id, session.archived === 1); }}
-              />
-            ))}
-          </div>
+          <>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
+              gap: 'var(--space-xl)'
+            }}>
+              {filteredSessions.map(session => (
+                <SessionCard
+                  key={session.id}
+                  session={session}
+                  onOpen={() => navigate(`/session/${session.id}`)}
+                  onDelete={() => handleDelete(session.id)}
+                  onClone={() => { void handleClone(session.id); }}
+                  onArchive={() => { void handleArchive(session.id, session.archived === 1); }}
+                />
+              ))}
+            </div>
+            {hasMore && !debouncedSearch && filter === 'all' && (
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'var(--space-xl)' }}>
+                <button
+                  className="btn-secondary"
+                  onClick={() => {
+                    const nextPage = page + 1;
+                    setPage(nextPage);
+                    void loadSessions(nextPage);
+                  }}
+                >
+                  {t('ui:dashboard.loadMore')}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

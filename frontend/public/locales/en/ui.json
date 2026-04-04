@@ -57,7 +57,8 @@
     "archiveSession": "Archive",
     "unarchiveSession": "Unarchive",
     "showArchived": "Show Archived",
-    "archivedBadge": "Archived"
+    "archivedBadge": "Archived",
+    "loadMore": "Load More"
   },
   "session": {
     "title": "Test Session",
@@ -82,7 +83,10 @@
     "notStarted": "Not Started",
     "bugsPlaceholder": "Describe the bug...",
     "noTests": "No tests in this section",
-    "freetextPlaceholder": "Enter your notes here..."
+    "freetextPlaceholder": "Enter your notes here...",
+    "timeoutWarning": "Session Expiring",
+    "timeoutMessage": "Your session will expire in {{minutes}}:{{seconds}}.",
+    "extendSession": "Extend Session"
   },
   "wizard": {
     "title": "Import Wizard",
@@ -130,7 +134,10 @@
     "confirmNewPassword": "Confirm New Password",
     "passwordMismatch": "Passwords do not match",
     "passwordChanged": "Password changed successfully",
-    "passwordChangeFailed": "Password change failed"
+    "passwordChangeFailed": "Password change failed",
+    "backup": "Database Backup",
+    "backupDescription": "Create a backup copy of the entire database.",
+    "backupDownload": "Download Backup"
   },
   "about": {
     "tagline": "Interactive test documentation for manual QA workflows",
@@ -185,7 +192,9 @@
     "error": "An error occurred",
     "cloneSuccess": "Session duplicated",
     "archiveSuccess": "Session archived",
-    "unarchiveSuccess": "Session unarchived"
+    "unarchiveSuccess": "Session unarchived",
+    "backupSuccess": "Backup created successfully",
+    "backupError": "Backup failed"
   },
   "errors": {
     "uploadFailed": "Upload failed. Make sure the file is a .md file.",

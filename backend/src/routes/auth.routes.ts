@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { AuthService } from '../services/auth.service.js';
 import { TemplateService } from '../services/template.service.js';
 import type { CreateUserBody, LoginBody } from '../types/index.js';
+import { rateLimiter } from '../middleware/rateLimiter.js';
 
 interface ChangePasswordBody {
   currentPassword: string;
@@ -52,7 +53,10 @@ export async function authRoutes(fastify: FastifyInstance): Promise<void> {
   });
 
   // Login
-  fastify.post<{ Body: LoginBody }>('/api/auth/login', async (request, reply) => {
+  fastify.post<{ Body: LoginBody }>(
+    '/api/auth/login',
+    { preHandler: [rateLimiter.limit({ windowMs: 15 * 60 * 1000, maxRequests: 5 })] },
+    async (request, reply) => {
     const { username, password } = request.body;
 
     if (!username || !password) {

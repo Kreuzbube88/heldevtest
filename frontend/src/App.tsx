@@ -14,6 +14,7 @@ import { AboutPage } from './pages/AboutPage';
 import { BuilderPage } from './pages/BuilderPage';
 import { Toast } from './components/Toast';
 import { ConfirmDialog } from './components/ConfirmDialog';
+import { SessionTimeoutWarning } from './components/SessionTimeoutWarning';
 
 function App() {
   const [setupRequired, setSetupRequired] = useState<boolean | null>(null);
@@ -79,6 +80,7 @@ function App() {
       </Routes>
       <Toast />
       <ConfirmDialog />
+      <SessionTimeoutWarning />
     </BrowserRouter>
   );
 }
